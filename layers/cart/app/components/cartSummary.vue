@@ -1,0 +1,34 @@
+<script setup lang="ts">
+import { UButton, UBadge } from '#components'
+import { useRouter } from 'vue-router'
+import { formatCurrency } from '#layers/shared/app/utils/currency'
+import { useCartStore } from '../stores/cart/useCartStore'
+
+const cartStore = useCartStore()
+const router = useRouter()
+
+function goToCart() {
+  router.push('/shoppingCart')
+}
+</script>
+
+<template>
+  <UButton
+    v-if="cartStore.itemCount > 0"
+    type="button"
+    color="neutral"
+    variant="solid"
+    size="lg"
+    icon="i-lucide-shopping-cart"
+    class="fixed bottom-6 right-6 z-50 shadow-xl hover:shadow-2xl transition-shadow"
+    @click="goToCart"
+  >
+    <span class="hidden sm:inline">{{ formatCurrency(cartStore.total) }}</span>
+    <UBadge
+      :label="cartStore.itemCount.toString()"
+      color="primary"
+      size="sm"
+      class="ml-2"
+    />
+  </UButton>
+</template>
