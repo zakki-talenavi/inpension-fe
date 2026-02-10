@@ -2,18 +2,34 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
 
-  css: ['~/assets/css/main.css'],
+  css: [
+    'primevue/resources/themes/lara-light-blue/theme.css',
+    'primevue/resources/primevue.min.css',
+    'primeicons/primeicons.css',
+    '~/app/assets/css/main.css',
+  ],
 
-  // Disable component auto-imports
-  components: {
-    dirs: []
-  },
+  components: [
+    {
+      path: '~/app/components',
+      pathPrefix: false,
+    },
+    {
+      path: '~/app/components/ui',
+      prefix: 'App',
+      pathPrefix: false,
+    }
+  ],
 
   devtools: { enabled: true },
 
-  // Disable all auto-imports
   imports: {
-    autoImport: false
+    autoImport: true,
+    dirs: [
+      'app/composables',
+      'app/stores',
+      'app/utils'
+    ]
   },
 
   runtimeConfig: {
@@ -23,20 +39,21 @@ export default defineNuxtConfig({
   },
 
   extends: [
-    './layers/core',
     './layers/shared',
-    './layers/products',
-    './layers/cart',
-    './layers/auth',
-    './layers/checkout',
-    './layers/reviews',
+    './layers/dplk',
+    './layers/company',
+    './layers/personal',
+    './layers/admin',
   ],
+
+  build: {
+    transpile: ['primevue']
+  },
 
   modules: [
     '@nuxt/eslint',
     '@nuxt/image',
     '@nuxt/scripts',
-    '@nuxt/ui',
     '@pinia/nuxt'
   ]
 })
