@@ -2,24 +2,14 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
 
-  css: [
-    'primevue/resources/themes/lara-light-blue/theme.css',
-    'primevue/resources/primevue.min.css',
-    'primeicons/primeicons.css',
-    '~/app/assets/css/main.css',
-  ],
-
-  components: [
-    {
-      path: '~/app/components',
-      pathPrefix: false,
-    },
-    {
-      path: '~/app/components/ui',
-      prefix: 'App',
-      pathPrefix: false,
-    }
-  ],
+  components: {
+    dirs: [
+      {
+        path: '~/app/components',
+        pathPrefix: false,
+      }
+    ]
+  },
 
   devtools: { enabled: true },
 
@@ -46,14 +36,25 @@ export default defineNuxtConfig({
     './layers/admin',
   ],
 
-  build: {
-    transpile: ['primevue']
-  },
-
   modules: [
+    '@primevue/nuxt-module',
     '@nuxt/eslint',
     '@nuxt/image',
     '@nuxt/scripts',
     '@pinia/nuxt'
+  ],
+
+  primevue: {
+    options: {
+      theme: 'lara-light-blue',
+      ripple: true
+    },
+    components: {
+      include: '*'
+    }
+  },
+
+  css: [
+    'primeicons/primeicons.css'
   ]
 })

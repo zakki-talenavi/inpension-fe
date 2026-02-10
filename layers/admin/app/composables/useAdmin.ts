@@ -1,4 +1,5 @@
-import { useUserStore } from "../stores/users"
+import { useUserStore } from '#layers/admin/app/stores/users'
+import { useNotification } from '#layers/admin/app/composables/useNotification'
 
 export function useAdmin() {
     const userStore = useUserStore()
