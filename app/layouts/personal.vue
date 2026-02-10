@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useAuthStore } from '#layers/shared/app/stores/auth'
+
 const authStore = useAuthStore()
 const router = useRouter()
 
