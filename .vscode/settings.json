@@ -3,13 +3,23 @@
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.preferences.includePackageJsonAutoImports": "off",
   "files.associations": {
-    "*.css": "tailwindcss"
+    "*.css": "tailwindcss",
+    "*.vue": "vue"
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "vue.volar"
   },
   "editor.quickSuggestions": {
     "strings": "on"
   },
-  "tailwindCSS.classAttributes": ["class", "ui"],
+  "tailwindCSS.classAttributes": [
+    "class",
+    "ui"
+  ],
   "tailwindCSS.experimental.classRegex": [
-    ["ui:\\s*{([^)]*)\\s*}", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+    [
+      "ui:\\s*{([^)]*)\\s*}",
+      "(?:'|\"|`)([^']*)(?:'|\"|`)"
+    ]
   ]
 }
