@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useAuthStore } from '#layers/shared/app/stores/auth'
+import { useAuthStore } from '#layers/auth/app/stores/auth/useAuthStore'
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -8,7 +8,7 @@ onMounted(() => {
   // Redirect based on user role
   if (authStore.user) {
     const role = authStore.user.role
-    
+
     switch (role) {
       case 'DPLK':
         router.push('/scope/dplk')

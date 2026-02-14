@@ -1,4 +1,4 @@
-import { useAuthStore } from '#layers/shared/app/stores/auth'
+import { useAuthStore } from '#layers/auth/app/stores/auth/useAuthStore'
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
     const authStore = useAuthStore()

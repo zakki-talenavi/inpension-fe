@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useToast } from 'primevue/usetoast'
-import { useAuthStore } from '#layers/shared/app/stores/auth'
+import { useAuthStore } from '#layers/auth/app/stores/auth/useAuthStore'
 
 defineOptions({
   name: 'LoginPage'

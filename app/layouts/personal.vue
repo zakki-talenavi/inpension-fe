@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useAuthStore } from '#layers/shared/app/stores/auth'
+import { useAuthStore } from '#layers/auth/app/stores/auth/useAuthStore'
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -51,23 +51,18 @@ async function handleLogout() {
         </div>
         <div class="flex items-center gap-4">
           <span class="text-white">{{ authStore.user?.fullName }}</span>
-          <Button
-            icon="pi pi-sign-out"
-            label="Logout"
-            severity="secondary"
-            @click="handleLogout"
-          />
+          <Button icon="pi pi-sign-out" label="Logout" severity="secondary" @click="handleLogout" />
         </div>
       </div>
     </header>
-    
+
     <!-- Main Container -->
     <div class="layout-container">
       <!-- Sidebar -->
       <aside class="layout-sidebar">
         <PanelMenu :model="menuItems" class="w-full" />
       </aside>
-      
+
       <!-- Main Content -->
       <main class="layout-content">
         <slot />
