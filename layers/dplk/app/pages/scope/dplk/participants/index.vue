@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { reactive, onMounted } from 'vue'
+import { definePageMeta } from 'nuxt/app'
+
 definePageMeta({
   layout: 'dplk',
   middleware: ['auth', 'dplk']

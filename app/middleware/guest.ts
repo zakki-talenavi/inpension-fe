@@ -1,3 +1,4 @@
+import { defineNuxtRouteMiddleware, navigateTo } from 'nuxt/app'
 import { isAuthenticated, getAccessToken } from '~/services/api/interceptors'
 
 /**

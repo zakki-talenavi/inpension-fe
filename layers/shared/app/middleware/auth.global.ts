@@ -1,3 +1,4 @@
+import { defineNuxtRouteMiddleware, navigateTo, useCookie } from 'nuxt/app'
 import { useAuthStore } from '#layers/auth/app/stores/auth/useAuthStore'
 
 export default defineNuxtRouteMiddleware(async (to, from) => {

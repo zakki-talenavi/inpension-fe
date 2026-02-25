@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref, reactive, onMounted } from 'vue'
+import { definePageMeta } from 'nuxt/app'
 import { participantService } from '#layers/company/services/participant.service'
 import type { CompanyParticipant } from '#layers/company/app/types'
 

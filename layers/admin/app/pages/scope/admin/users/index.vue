@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { ref, reactive, onMounted } from 'vue'
+import { definePageMeta } from 'nuxt/app'
+
 definePageMeta({
   layout: 'admin',
   middleware: ['auth', 'admin']

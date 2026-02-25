@@ -1,3 +1,5 @@
+import { computed } from 'vue'
+
 export function useCompany() {
     const companyStore = useCompanyStore()
     const { showSuccess, showError } = useNotification()

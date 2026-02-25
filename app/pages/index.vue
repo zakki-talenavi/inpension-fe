@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { onMounted } from 'vue'
+import { useRouter } from 'nuxt/app'
 import { useAuthStore } from '#layers/auth/app/stores/auth/useAuthStore'
 
 const authStore = useAuthStore()

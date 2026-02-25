@@ -1,3 +1,5 @@
+import { computed } from 'vue'
+import { defineNuxtRouteMiddleware, navigateTo, createError, useState } from 'nuxt/app'
 import { isAuthenticated, getAccessToken } from '~/services/api/interceptors'
 import type { User } from '~/types/models'
 

@@ -1,3 +1,5 @@
+import { computed } from 'vue'
+
 export function useParticipant() {
     const participantStore = useParticipantStore()
     const { showSuccess, showError } = useNotification()

@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+import { useRouter, definePageMeta } from 'nuxt/app'
+
 definePageMeta({
   layout: 'company',
   middleware: ['auth', 'company']

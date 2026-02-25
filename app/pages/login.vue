@@ -1,4 +1,7 @@
 <script setup lang="ts">
+/// <reference path="../global.d.ts" />
+import { ref } from 'vue'
+import { useRouter } from 'nuxt/app'
 import { useToast } from 'primevue/usetoast'
 import { useAuthStore } from '#layers/auth/app/stores/auth/useAuthStore'
 

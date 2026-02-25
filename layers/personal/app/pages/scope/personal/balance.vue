@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { ref, watch, onMounted } from 'vue'
+import { definePageMeta } from 'nuxt/app'
+
 definePageMeta({
   layout: 'personal',
   middleware: ['auth', 'personal']

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import { definePageMeta } from 'nuxt/app'
 import { dashboardService } from '#layers/company/services/dashboard.service'
 import type { CompanyDashboardStats } from '#layers/company/app/types'
 

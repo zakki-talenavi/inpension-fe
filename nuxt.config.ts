@@ -14,7 +14,6 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
 
   imports: {
-    autoImport: true,
     dirs: [
       'app/composables',
       'app/stores',
