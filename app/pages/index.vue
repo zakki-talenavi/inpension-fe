@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from 'nuxt/app'
-import { useAuthStore } from '#layers/auth/app/stores/auth/useAuthStore'
+import { useAuthStore } from '~/stores/auth/useAuthStore'
 
 const authStore = useAuthStore()
 const router = useRouter()

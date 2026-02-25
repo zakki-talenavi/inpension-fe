@@ -13,6 +13,10 @@ export default defineNuxtConfig({
 
   devtools: { enabled: true },
 
+  nitro: {
+    logLevel: 3
+  },
+
   imports: {
     dirs: [
       'app/composables',
@@ -29,7 +33,6 @@ export default defineNuxtConfig({
 
   extends: [
     './layers/shared',
-    './layers/auth',
   ],
 
   modules: [

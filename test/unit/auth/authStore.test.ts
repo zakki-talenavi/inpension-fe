@@ -1,7 +1,13 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
-import { useAuthStore } from '#layers/auth/app/stores/auth/useAuthStore'
-import type { User } from '#layers/auth/app/schemas/user'
+import { ref } from 'vue'
+
+vi.mock('nuxt/app', () => ({
+  useCookie: () => ref<string | null>(null),
+}))
+
+import { useAuthStore } from '~/stores/auth/useAuthStore'
+import type { User } from '~/schemas/user'
 
 const mockUser: User = {
   id: '1',

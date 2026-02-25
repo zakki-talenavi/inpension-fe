@@ -22,6 +22,7 @@ export default defineConfig({
         },
         resolve: {
           alias: {
+            '~': resolve(__dirname, './app'),
             '#layers': resolve(__dirname, './layers'),
             '#app': resolve(__dirname, './.nuxt'),
           },

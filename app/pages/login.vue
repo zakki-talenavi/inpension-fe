@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'nuxt/app'
 import { useToast } from 'primevue/usetoast'
-import { useAuthStore } from '#layers/auth/app/stores/auth/useAuthStore'
+import { useAuthStore } from '~/stores/auth/useAuthStore'
 
 const authStore = useAuthStore()
 const router = useRouter()
