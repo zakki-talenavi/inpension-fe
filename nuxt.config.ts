@@ -29,10 +29,7 @@ export default defineNuxtConfig({
 
   extends: [
     './layers/shared',
-    './layers/dplk',
-    './layers/company',
-    './layers/personal',
-    './layers/admin',
+    './layers/auth',
   ],
 
   modules: [

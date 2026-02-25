@@ -220,14 +220,9 @@ export const ProtectedRoutes = [
 ] as const
 
 /**
- * Role-based routes
+ * Role-based routes (extend when adding scope/role pages)
  */
-export const RoleRoutes = {
-    ADMIN: ['/admin'],
-    DPLK: ['/dplk'],
-    COMPANY: ['/company'],
-    PERSONAL: ['/personal'],
-} as const
+export const RoleRoutes = {} as const
 
 // ============================================
 // Local Storage Keys

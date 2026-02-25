@@ -31,25 +31,8 @@ async function handleLogin() {
       life: 2000
     })
 
-    // Slight delay to show success state
     setTimeout(() => {
-      const role = authStore.user?.role
-      switch (role) {
-        case 'DPLK':
-          router.push('/scope/dplk')
-          break
-        case 'COMPANY':
-          router.push('/scope/company')
-          break
-        case 'PERSONAL':
-          router.push('/scope/personal')
-          break
-        case 'ADMINISTRATOR':
-          router.push('/scope/admin')
-          break
-        default:
-          router.push('/')
-      }
+      router.push('/')
     }, 1000)
 
   } catch (error: unknown) {
