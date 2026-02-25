@@ -5,7 +5,7 @@ import { setPageLayout, defineNuxtRouteMiddleware } from 'nuxt/app'
  * Done in middleware to avoid hydration warnings from setPageLayout in components.
  */
 export default defineNuxtRouteMiddleware((to) => {
-  if (to.path === '/login' || to.path === '/scope') {
+  if (to.path === '/login' || to.path === '/register' || to.path === '/scope') {
     setPageLayout(false)
   }
 })
