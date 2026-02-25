@@ -37,16 +37,6 @@ function handleAction(role: RoleOption, action: { type: RoleActionType; label: s
       aria-hidden="true"
     />
 
-    <!-- Top bar: logo right -->
-    <header class="scope-header relative z-10 flex justify-end items-center pr-4 pt-4 sm:pr-6 sm:pt-6">
-      <div
-        class="scope-logo w-10 h-10 sm:w-11 sm:h-11 rounded-lg bg-[#7dd3c0] flex items-center justify-center text-white font-semibold text-sm shadow-sm"
-        aria-hidden="true"
-      >
-        ae
-      </div>
-    </header>
-
     <!-- Main: title + subtitle + cards -->
     <main class="scope-main flex-1 flex flex-col items-center justify-center py-6 sm:py-8 px-4 pb-24 relative z-10">
       <div class="scope-heading text-center mb-8 sm:mb-10 max-w-[560px]">
