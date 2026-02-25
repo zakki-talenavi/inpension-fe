@@ -23,6 +23,9 @@ const currentRoleRouting = computed(() => {
 
 const isPersonal = computed(() => roleKey.value === 'personal')
 
+const bgImageError = ref(false)
+const loginBgUrl = '/assets/layout/images/lp/background-login-opsindo.jpg'
+
 const errors = computed(() => {
   const e: { email?: string; password?: string } = {}
   if (submitted.value) {
@@ -48,12 +51,19 @@ async function onSubmit() {
   <div class="login-page flex h-screen w-full overflow-hidden">
     <!-- Left: branding + background -->
     <div class="login-left relative flex-1 h-full max-md:hidden md:flex md:flex-col md:min-w-0">
+      <!-- Gradient + warna dasar; gambar di atas, disembunyikan jika gagal load (file tidak ada) -->
       <div
-        class="login-bg absolute inset-0 bg-cover bg-center bg-no-repeat bg-[#1a1a2e]"
-        :style="{
-          backgroundImage: 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.6)), url(\'/assets/layout/images/lp/background-login.jpg\')',
-        }"
+        class="login-bg absolute inset-0 bg-[#1a1a2e]"
+        :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6))' }"
       />
+      <img
+        v-show="!bgImageError"
+        :src="loginBgUrl"
+        alt=""
+        class="login-bg-img absolute inset-0 w-full h-full object-cover object-center pointer-events-none z-0"
+        aria-hidden="true"
+        @error="bgImageError = true"
+      >
       <div class="login-overlay absolute inset-0 flex flex-col justify-between py-8 px-6 md:px-8 z-10">
         <NuxtLink
           to="/"
