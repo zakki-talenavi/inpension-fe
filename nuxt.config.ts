@@ -1,4 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import tailwindcss from '@tailwindcss/vite'
+import Aura from '@primeuix/themes/aura'
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
 
@@ -11,7 +14,7 @@ export default defineNuxtConfig({
     ]
   },
 
-  devtools: { enabled: true },
+  devtools: { enabled: false },
 
   nitro: {
     logLevel: 3
@@ -28,6 +31,23 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || 'https://api-inpension.codeline.id/api',
+      /** Role IDs only (key -> roleId). Definitions in app/config/scopeRoles.ts. Override via NUXT_PUBLIC_SCOPE_ROLE_IDS (JSON object). */
+      scopeRoleIds: (() => {
+        const raw = process.env.NUXT_PUBLIC_SCOPE_ROLE_IDS
+        if (raw && typeof raw === 'string') {
+          try {
+            const parsed = JSON.parse(raw) as Record<string, string>
+            if (parsed && typeof parsed === 'object') return parsed
+          } catch {
+            /* fallback to default */
+          }
+        }
+        return {
+          dplk: '351c138d-176a-4f5b-b0b1-8c188adf731e',
+          company: '4b7a0c38-2877-4c7a-a6a8-5db07938207b',
+          personal: 'b0572a75-cb24-496a-991a-255399efafcb',
+        }
+      })(),
     }
   },
 
@@ -45,15 +65,22 @@ export default defineNuxtConfig({
 
   primevue: {
     options: {
-      theme: 'lara-light-blue',
-      ripple: true
+      ripple: true,
+      theme: {
+        preset: Aura,
+      },
     },
     components: {
-      include: '*'
-    }
+      include: ['Card', 'Button', 'Toast'],
+    },
   },
 
   css: [
+    './app/assets/css/main.css',
     'primeicons/primeicons.css'
-  ]
+  ],
+
+  vite: {
+    plugins: [tailwindcss()],
+  },
 })
