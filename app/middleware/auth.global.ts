@@ -1,10 +1,6 @@
 import { defineNuxtRouteMiddleware, navigateTo, useCookie } from 'nuxt/app'
 import { useAuthStore } from '~/stores/auth/useAuthStore'
 
-/**
- * Global auth middleware: protect private routes, redirect to login when no token.
- * Auth lives in app (see docs/READINESS.md).
- */
 export default defineNuxtRouteMiddleware(async (to) => {
   const authStore = useAuthStore()
   const token = useCookie('auth_token')

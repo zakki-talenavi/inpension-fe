@@ -1,3 +1,79 @@
 @import "tailwindcss";
 
-/* Override browser default (see app.vue for html/body reset) */
+/* Tailwind 4 @theme: design tokens */
+@theme {
+  --color-primary: #52629d;
+  --color-primary-hover: #435180;
+  --color-primary-ring: rgba(82, 98, 157, 0.25);
+}
+
+/* ---------- Auth form (login, register, forgot-password): plain CSS agar tidak glitch on load ---------- */
+.auth-form .p-inputtext,
+.auth-form input[type="text"],
+.auth-form input[type="email"],
+.auth-form input[type="password"] {
+  min-height: 2.75rem;
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+  background-color: #fff;
+  padding: 0.75rem 1rem;
+  color: #111827;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.auth-form .p-inputtext:focus,
+.auth-form input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-ring);
+}
+.auth-form .p-inputgroup .p-inputtext {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-left-radius: 0.5rem;
+}
+.auth-form .p-invalid .p-inputtext,
+.auth-form .p-invalid input {
+  border-color: #ef4444;
+}
+
+.auth-form .p-password {
+  display: flex;
+  align-items: center;
+}
+.auth-form .p-password .p-inputtext {
+  flex: 1;
+}
+.auth-form .p-password [class*="maskIcon"],
+.auth-form .p-password [class*="unmaskIcon"],
+.auth-form .p-password .p-icon {
+  cursor: pointer;
+  opacity: 1;
+  transition: opacity 0.15s ease;
+}
+.auth-form .p-password [class*="maskIcon"]:hover,
+.auth-form .p-password [class*="unmaskIcon"]:hover,
+.auth-form .p-password .p-icon:hover {
+  opacity: 0.7;
+}
+
+.auth-form .auth-btn.p-button,
+.auth-form .auth-btn .p-button {
+  border-radius: 0.625rem;
+  padding: 0.75rem 1.25rem;
+  font-weight: 500;
+  color: #fff;
+  transition: filter 0.15s, box-shadow 0.15s;
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+}
+.auth-form .auth-btn.p-button:hover:not(:disabled),
+.auth-form .auth-btn .p-button:hover:not(:disabled) {
+  filter: brightness(1.05);
+  background-color: var(--color-primary-hover) !important;
+  border-color: var(--color-primary-hover) !important;
+}
+.auth-form .auth-btn.p-button:focus-visible,
+.auth-form .auth-btn .p-button:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-primary-ring);
+}

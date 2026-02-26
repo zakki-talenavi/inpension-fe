@@ -6,6 +6,8 @@ import { UserSchema, type User } from '~/schemas/user'
 interface LoginCredentials {
   email: string
   password: string
+  captchaKey?: string
+  captcha?: string
 }
 
 interface RegisterData {

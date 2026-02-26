@@ -11,7 +11,6 @@ const logoUrl = computed(() => `${requestURL.origin}/assets/layout/images/login/
 
 <template>
   <div class="auth-split-page flex h-screen w-full overflow-hidden">
-    <!-- Left: branding + background (sama untuk login & register; ubah di sini = ganti di semua) -->
     <div class="auth-split-left relative flex-1 h-full max-md:hidden md:flex md:flex-col md:min-w-0">
       <div
         class="auth-split-bg absolute inset-0 bg-[#1a1a2e]"
@@ -69,7 +68,6 @@ const logoUrl = computed(() => `${requestURL.origin}/assets/layout/images/login/
       <slot />
     </div>
 
-    <!-- Footer (sama di semua halaman auth) -->
     <footer class="auth-split-footer fixed bottom-0 left-0 right-0 flex justify-between items-center px-4 sm:px-6 py-2.5 bg-[#6C757D] text-white text-xs z-20">
       <span class="opacity-95">© 2020 OpsiTech • v1.1.1.7 • v1.1.15</span>
       <span class="opacity-80">All Rights Reserved</span>

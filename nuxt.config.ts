@@ -71,7 +71,7 @@ export default defineNuxtConfig({
       },
     },
     components: {
-      include: ['Card', 'Button', 'Toast', 'InputText', 'Password'],
+      include: ['Card', 'Button', 'Toast', 'InputText', 'Password', 'InputGroup', 'InputGroupAddon'],
     },
   },
 
