@@ -29,7 +29,6 @@
     "@nuxt/eslint": "1.10.0",
     "@nuxt/image": "1.11.0",
     "@nuxt/scripts": "0.13.0",
-    "@nuxt/ui": "4.1.0",
     "@pinia/nuxt": "^0.11.2",
     "@primeuix/themes": "^2.0.3",
     "@primevue/nuxt-module": "^4.5.4",
