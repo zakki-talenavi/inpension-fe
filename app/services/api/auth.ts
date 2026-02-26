@@ -1,0 +1,86 @@
+/**
+ * Auth API service – single place for all auth-related API calls.
+ * Uses shared API client; paths from app/config/api.ts.
+ */
+import { api } from './client'
+import { AUTH_ENDPOINTS } from '~/config/api'
+import type { ApiResponse } from './client'
+import type { User } from '~/types/api'
+
+// --- Request/response types for auth endpoints ---
+
+export interface LoginRequest {
+    email: string
+    password: string
+    captchaKey?: string
+    captcha?: string
+}
+
+export interface LoginResponse {
+    user: User
+    accessToken: string
+    refreshToken?: string
+}
+
+export interface RegisterRequest {
+    name: string
+    email: string
+    password: string
+    role: string
+    /** Optional: identity number / NIK */
+    identityNumber?: string
+}
+
+export interface RegisterResponse {
+    user: User
+    accessToken: string
+    refreshToken?: string
+}
+
+export interface MeResponse {
+    user: User
+}
+
+export interface RefreshRequest {
+    refreshToken: string
+}
+
+export interface RefreshResponse {
+    accessToken: string
+    refreshToken?: string
+}
+
+export interface CaptchaResponse {
+    key: string
+    image: string
+}
+
+/** Login */
+export function authLogin(payload: LoginRequest) {
+    return api.post<LoginResponse>(AUTH_ENDPOINTS.login, payload)
+}
+
+/** Register */
+export function authRegister(payload: RegisterRequest) {
+    return api.post<RegisterResponse>(AUTH_ENDPOINTS.register, payload)
+}
+
+/** Get current user (requires Bearer token) */
+export function authMe() {
+    return api.get<MeResponse>(AUTH_ENDPOINTS.me)
+}
+
+/** Refresh access token */
+export function authRefresh(payload: RefreshRequest) {
+    return api.post<RefreshResponse>(AUTH_ENDPOINTS.refresh, payload)
+}
+
+/** Validate token (optional) */
+export function authValidate() {
+    return api.get<{ valid: boolean }>(AUTH_ENDPOINTS.validate)
+}
+
+/** Get captcha (key + image URL or base64) */
+export function authCaptcha(): Promise<ApiResponse<CaptchaResponse>> {
+    return api.get<CaptchaResponse>(AUTH_ENDPOINTS.captcha)
+}

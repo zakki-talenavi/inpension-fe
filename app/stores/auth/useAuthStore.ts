@@ -2,6 +2,14 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { useCookie } from 'nuxt/app'
 import { UserSchema, type User } from '~/schemas/user'
+import {
+  setAccessToken,
+  setRefreshToken,
+  clearTokens,
+  getAccessToken,
+} from '~/services/api/interceptors'
+import { authLogin, authRegister, authMe } from '~/services/api/auth'
+import type { ApiError } from '~/services/api/client'
 
 interface LoginCredentials {
   email: string
@@ -15,6 +23,18 @@ interface RegisterData {
   password: string
   name: string
   role: string
+  identityNumber?: string
+}
+
+/** Map API user to schema User (id, email, fullName, role). Accepts fullName or name. */
+function toSchemaUser(apiUser: { id: string; email: string; fullName?: string; name?: string; role: string }): User {
+  const fullName = apiUser.fullName ?? apiUser.name ?? ''
+  return UserSchema.parse({
+    id: apiUser.id,
+    email: apiUser.email,
+    fullName,
+    role: apiUser.role,
+  })
 }
 
 export const useAuthStore = defineStore('auth', () => {
@@ -31,24 +51,24 @@ export const useAuthStore = defineStore('auth', () => {
     loading.value = true
     error.value = null
     try {
-      await new Promise(resolve => setTimeout(resolve, 500))
-      const mockUser: User = {
-        id: '1',
+      const res = await authLogin({
         email: credentials.email,
-        fullName: 'Test User',
-        role: credentials.email.includes('dplk') ? 'DPLK' :
-          credentials.email.includes('company') ? 'COMPANY' :
-            credentials.email.includes('admin') ? 'ADMINISTRATOR' : 'PERSONAL'
-      }
-      const mockToken = 'mock-jwt-token-' + Date.now()
-      const validated = UserSchema.parse(mockUser)
+        password: credentials.password,
+        captchaKey: credentials.captchaKey,
+        captcha: credentials.captcha,
+      })
+      const { user: apiUser, accessToken, refreshToken } = res.data
+      const validated = toSchemaUser(apiUser)
+      setAccessToken(accessToken)
+      if (refreshToken) setRefreshToken(refreshToken)
       user.value = validated
-      token.value = mockToken
+      token.value = accessToken
       const tokenCookie = useCookie('auth_token')
-      tokenCookie.value = mockToken
-      return { user: validated, token: mockToken }
+      tokenCookie.value = accessToken
+      return { user: validated, token: accessToken }
     } catch (err: unknown) {
-      error.value = err instanceof Error ? err.message : 'Login failed'
+      const apiErr = err as ApiError
+      error.value = apiErr?.message ?? (err instanceof Error ? err.message : 'Login failed')
       throw err
     } finally {
       loading.value = false
@@ -59,22 +79,25 @@ export const useAuthStore = defineStore('auth', () => {
     loading.value = true
     error.value = null
     try {
-      await new Promise(resolve => setTimeout(resolve, 500))
-      const mockUser: User = {
-        id: '1',
+      const res = await authRegister({
+        name: data.name,
         email: data.email,
-        fullName: data.name,
-        role: data.role as User['role']
-      }
-      const mockToken = 'mock-jwt-token-' + Date.now()
-      const validated = UserSchema.parse(mockUser)
+        password: data.password,
+        role: data.role,
+        identityNumber: data.identityNumber,
+      })
+      const { user: apiUser, accessToken, refreshToken } = res.data
+      const validated = toSchemaUser(apiUser)
+      setAccessToken(accessToken)
+      if (refreshToken) setRefreshToken(refreshToken)
       user.value = validated
-      token.value = mockToken
+      token.value = accessToken
       const tokenCookie = useCookie('auth_token')
-      tokenCookie.value = mockToken
-      return { user: validated, token: mockToken }
+      tokenCookie.value = accessToken
+      return { user: validated, token: accessToken }
     } catch (err: unknown) {
-      error.value = err instanceof Error ? err.message : 'Registration failed'
+      const apiErr = err as ApiError
+      error.value = apiErr?.message ?? (err instanceof Error ? err.message : 'Registration failed')
       throw err
     } finally {
       loading.value = false
@@ -85,20 +108,20 @@ export const useAuthStore = defineStore('auth', () => {
     loading.value = true
     error.value = null
     try {
-      if (user.value) return
       const tokenCookie = useCookie('auth_token')
-      if (tokenCookie.value) {
-        const mockUser: User = {
-          id: '1',
-          email: 'test@example.com',
-          fullName: 'Test User',
-          role: 'PERSONAL'
-        }
-        user.value = UserSchema.parse(mockUser)
-        token.value = tokenCookie.value || null
-      }
+      const storedToken = getAccessToken() ?? tokenCookie.value
+      if (!storedToken) return
+      const res = await authMe()
+      const validated = toSchemaUser(res.data.user)
+      user.value = validated
+      token.value = storedToken
     } catch (err: unknown) {
       error.value = err instanceof Error ? err.message : 'Failed to fetch user'
+      clearTokens()
+      user.value = null
+      token.value = null
+      const tokenCookie = useCookie('auth_token')
+      tokenCookie.value = null
       throw err
     } finally {
       loading.value = false
@@ -106,6 +129,7 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function logout() {
+    clearTokens()
     user.value = null
     token.value = null
     error.value = null

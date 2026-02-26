@@ -30,7 +30,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || 'https://api-inpension.codeline.id/api',
+      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || 'https://inpension-remake.codeline.id/api',
       /** Role IDs only (key -> roleId). Definitions in app/config/scopeRoles.ts. Override via NUXT_PUBLIC_SCOPE_ROLE_IDS (JSON object). */
       scopeRoleIds: (() => {
         const raw = process.env.NUXT_PUBLIC_SCOPE_ROLE_IDS

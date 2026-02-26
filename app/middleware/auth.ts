@@ -82,12 +82,12 @@ export function useAuth() {
         }
 
         try {
-            const { api } = await import('~/services/api/client')
-            const response = await api.get<{ user: User }>('/auth/me')
+            const { authMe } = await import('~/services/api/auth')
+            const response = await authMe()
             user.value = response.data.user
             return user.value
-        } catch (error) {
-            console.error('Failed to fetch user:', error)
+        } catch (_error) {
+            console.error('Failed to fetch user:', _error)
             return null
         }
     }

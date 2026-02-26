@@ -12,8 +12,11 @@ export function useCaptcha() {
   async function fetchCaptcha() {
     loading.value = true
     try {
-      // TODO: ganti dengan api.get('/captcha') saat backend siap
-      await new Promise(r => setTimeout(r, 300))
+      const { authCaptcha } = await import('~/services/api/auth')
+      const res = await authCaptcha()
+      captchaKey.value = res.data.key
+      captchaImage.value = res.data.image
+    } catch {
       captchaKey.value = DUMMY_CAPTCHA_KEY
       captchaImage.value = DUMMY_CAPTCHA_IMAGE
     } finally {
