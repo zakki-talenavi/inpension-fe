@@ -24,18 +24,16 @@ const model = defineModel<string>({ default: '' })
     >
       Captcha
     </label>
-    <!-- Area gambar captcha lebih besar agar mudah dibaca -->
-    <div class="mb-3 flex min-h-20 items-center justify-center overflow-hidden px-4 py-3">
+    <div class="mb-3 flex min-h-20 items-center justify-center overflow-hidden">
       <img
         v-if="captchaImg"
         :src="captchaImg"
         alt="Captcha"
-        class="block max-h-20 w-auto max-w-full object-contain"
+        class="block max-h-20 w-auto max-w-[400px] object-contain"
         aria-hidden="true"
       >
-      <Skeleton v-else width="14rem" height="4.5rem" class="rounded-sm" />
+      <Skeleton v-else width="400px" height="4.5rem" class="rounded-sm" />
     </div>
-    <!-- InputGroup: input + tombol refresh di kanan (satu unit) -->
     <InputGroup>
       <InputText
         :id="inputId ?? 'captcha-input'"
