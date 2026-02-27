@@ -38,7 +38,16 @@ export interface RegisterResponse {
 }
 
 export interface MeResponse {
-    user: User
+    id: string
+    username: string
+    email: string
+    role_id: string
+    role_name: string
+    role_code: string
+    master_role_id: string
+    master_role_name: string
+    master_role_code: string
+    permissions: string[]
 }
 
 export interface RefreshRequest {
@@ -62,7 +71,7 @@ export function authLogin(payload: LoginRequest) {
         username: payload.email,
         password: payload.password,
         captcha_id: payload.captchaKey,
-        captcha_answer: payload.captcha
+        captcha_answer: payload.captcha?.toUpperCase()
     })
 }
 

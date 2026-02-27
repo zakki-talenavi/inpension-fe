@@ -113,8 +113,9 @@ export const useAuthStore = defineStore('auth', () => {
       const tokenCookie = useCookie('auth_token')
       const storedToken = getAccessToken() ?? tokenCookie.value
       if (!storedToken) return
+      setAccessToken(storedToken)
       const res = await authMe()
-      const validated = toSchemaUser(res.data.user)
+      const validated = toSchemaUser(res.data as unknown as Record<string, any>)
       user.value = validated
       token.value = storedToken
     } catch (err: unknown) {

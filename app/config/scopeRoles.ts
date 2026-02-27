@@ -18,7 +18,7 @@ export const SCOPE_ROLE_DEFINITIONS: ScopeRoleDefinition[] = [
     key: 'dplk',
     title: 'ADMIN',
     subtitle: 'DPLK',
-    routing: '/scope/dplk',
+    routing: '/dashboard',
     icon: 'pi-desktop',
     image: '/assets/layout/images/lp/admin.png',
     actions: [
@@ -30,7 +30,7 @@ export const SCOPE_ROLE_DEFINITIONS: ScopeRoleDefinition[] = [
     key: 'company',
     title: 'PERUSAHAAN',
     subtitle: 'PESERTA',
-    routing: '/scope/company',
+    routing: '/dashboard',
     icon: 'pi-building',
     image: '/assets/layout/images/lp/company.png',
     actions: [{ type: 'login', label: 'Log In' }],
@@ -39,7 +39,7 @@ export const SCOPE_ROLE_DEFINITIONS: ScopeRoleDefinition[] = [
     key: 'personal',
     title: 'INDIVIDU',
     subtitle: 'PESERTA',
-    routing: '/scope/personal',
+    routing: '/dashboard',
     icon: 'pi-user',
     image: '/assets/layout/images/lp/avatar.png',
     actions: [

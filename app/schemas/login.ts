@@ -19,10 +19,6 @@ const loginId = z
 const password = z
   .string()
   .min(1, 'Kata sandi tidak boleh kosong')
-  .min(
-    Validation.PASSWORD_MIN_LENGTH,
-    `Kata sandi minimal ${Validation.PASSWORD_MIN_LENGTH} karakter`
-  )
   .max(
     Validation.PASSWORD_MAX_LENGTH,
     `Kata sandi maksimal ${Validation.PASSWORD_MAX_LENGTH} karakter`

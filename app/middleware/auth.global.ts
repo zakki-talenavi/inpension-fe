@@ -5,19 +5,28 @@ export default defineNuxtRouteMiddleware(async (to) => {
   const authStore = useAuthStore()
   const token = useCookie('auth_token')
 
+  // All routes that unauthenticated users can access
   const publicRoutes = ['/', '/login', '/register', '/forgot-password']
-  if (publicRoutes.includes(to.path)) return
+  const isPublicRoute = publicRoutes.includes(to.path)
 
-  if (!token.value) {
-    return navigateTo('/login')
+  // AUTHENTICATED user trying to access public pages → redirect to dashboard
+  if (token.value && isPublicRoute) {
+    return navigateTo('/dashboard')
   }
 
-  if (!authStore.user) {
+  // UNAUTHENTICATED user trying to access protected pages → redirect to home
+  if (!token.value && !isPublicRoute) {
+    return navigateTo('/')
+  }
+
+  // AUTHENTICATED user on protected page → ensure user data is loaded
+  if (token.value && !isPublicRoute && !authStore.user) {
     try {
       await authStore.fetchCurrentUser()
     } catch {
       token.value = null
-      return navigateTo('/login')
+      return navigateTo('/')
     }
   }
 })
+
