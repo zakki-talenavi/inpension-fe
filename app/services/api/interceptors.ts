@@ -5,6 +5,7 @@
 
 const TOKEN_KEY = 'auth_token'
 const REFRESH_TOKEN_KEY = 'refresh_token'
+import { getJwtMaxAge } from '~/utils/jwt'
 
 // In-memory fallback for SSR (server-side) where localStorage is unavailable
 let _memoryToken: string | null = null
@@ -32,6 +33,8 @@ export function setAccessToken(token: string): void {
     _memoryToken = token
     if (isClient()) {
         localStorage.setItem(TOKEN_KEY, token)
+        const maxAge = getJwtMaxAge(token)
+        document.cookie = `${TOKEN_KEY}=${token}; path=/; max-age=${maxAge}`
     }
 }
 
@@ -39,6 +42,8 @@ export function setRefreshToken(token: string): void {
     _memoryRefreshToken = token
     if (isClient()) {
         localStorage.setItem(REFRESH_TOKEN_KEY, token)
+        const maxAge = getJwtMaxAge(token)
+        document.cookie = `${REFRESH_TOKEN_KEY}=${token}; path=/; max-age=${maxAge}`
     }
 }
 
@@ -48,6 +53,8 @@ export function clearTokens(): void {
     if (isClient()) {
         localStorage.removeItem(TOKEN_KEY)
         localStorage.removeItem(REFRESH_TOKEN_KEY)
+        document.cookie = `${TOKEN_KEY}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`
+        document.cookie = `${REFRESH_TOKEN_KEY}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`
     }
 }
 

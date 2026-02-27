@@ -66,9 +66,11 @@ export const useAuthStore = defineStore('auth', () => {
       if (refresh_token) setRefreshToken(refresh_token)
       user.value = validated
       token.value = access_token
-      const tokenCookie = useCookie('auth_token')
+      const maxAge = getJwtMaxAge(access_token)
+      const tokenCookie = useCookie('auth_token', { maxAge, path: '/' })
       tokenCookie.value = access_token
-      const refreshCookie = useCookie('refresh_token')
+      const refreshMaxAge = refresh_token ? getJwtMaxAge(refresh_token) : maxAge
+      const refreshCookie = useCookie('refresh_token', { maxAge: refreshMaxAge, path: '/' })
       refreshCookie.value = refresh_token ?? null
       return { user: validated, token: access_token }
     } catch (err: unknown) {
@@ -97,8 +99,12 @@ export const useAuthStore = defineStore('auth', () => {
       if (refresh_token) setRefreshToken(refresh_token)
       user.value = validated
       token.value = access_token
-      const tokenCookie = useCookie('auth_token')
+      const maxAge = getJwtMaxAge(access_token)
+      const tokenCookie = useCookie('auth_token', { maxAge, path: '/' })
       tokenCookie.value = access_token
+      const refreshMaxAge = refresh_token ? getJwtMaxAge(refresh_token) : maxAge
+      const refreshCookie = useCookie('refresh_token', { maxAge: refreshMaxAge, path: '/' })
+      refreshCookie.value = refresh_token ?? null
       return { user: validated, token: access_token }
     } catch (err: unknown) {
       const apiErr = err as ApiError
