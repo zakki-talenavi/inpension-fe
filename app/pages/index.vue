@@ -113,8 +113,8 @@ function handleAction(role: RoleOption, action: { type: RoleActionType; label: s
       </div>
     </main>
 
-    <footer class="scope-footer relative z-10 flex justify-between items-center flex-wrap gap-2 px-4 sm:px-6 py-3 bg-[#6C757D] text-white text-xs">
-      <span class="opacity-95 text-[0.7rem] tracking-wide">© 2026 Opsibiz • v1.1.7 • v1.1.12</span>
+    <footer class="scope-footer relative z-10 flex justify-between items-center flex-wrap gap-2 px-4 sm:px-6 py-2 bg-[#6C757D] text-white text-xs">
+      <span class="opacity-95 text-[0.7rem] tracking-wide">© 2026 Opsitech • v0.0.1 • v0.0.0</span>
       <span class="opacity-95 text-[0.7rem] tracking-wide">All Rights Reserved</span>
     </footer>
   </div>

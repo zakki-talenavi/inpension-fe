@@ -44,7 +44,7 @@ export const SCOPE_ROLE_DEFINITIONS: ScopeRoleDefinition[] = [
     image: '/assets/layout/images/lp/avatar.png',
     actions: [
       { type: 'register', label: 'Daftar', route: '/register' },
-      { type: 'login', label: 'Log In', variant: 'outlined' },
+      { type: 'login', label: 'Log In' },
     ],
   },
 ]
