@@ -60,6 +60,15 @@ body {
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 
+.auth-form input:-webkit-autofill,
+.auth-form input:-webkit-autofill:hover,
+.auth-form input:-webkit-autofill:focus,
+.auth-form input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #e8f0fe inset !important;
+  -webkit-text-fill-color: #111827 !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
 .auth-form .p-inputtext:focus,
 .auth-form input:focus {
   border-color: var(--color-primary);
@@ -69,7 +78,8 @@ body {
 .auth-form .p-inputgroup .p-inputtext {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
-  border-left-radius: 0.5rem;
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
 }
 
 .auth-form .p-invalid .p-inputtext,

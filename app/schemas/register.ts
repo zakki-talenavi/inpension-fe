@@ -38,34 +38,7 @@ const email = z
       .email('Format email tidak valid')
   )
 
-const password = z
-  .string()
-  .min(1, 'Kata sandi tidak boleh kosong')
-  .min(
-    Validation.PASSWORD_MIN_LENGTH,
-    `Kata sandi minimal ${Validation.PASSWORD_MIN_LENGTH} karakter`
-  )
-  .max(
-    Validation.PASSWORD_MAX_LENGTH,
-    `Kata sandi maksimal ${Validation.PASSWORD_MAX_LENGTH} karakter`
-  )
-  .refine(
-    (val) => !Validation.PASSWORD_REQUIRE_UPPERCASE || /[A-Z]/.test(val),
-    'Kata sandi harus mengandung huruf besar'
-  )
-  .refine(
-    (val) => !Validation.PASSWORD_REQUIRE_LOWERCASE || /[a-z]/.test(val),
-    'Kata sandi harus mengandung huruf kecil'
-  )
-  .refine(
-    (val) => !Validation.PASSWORD_REQUIRE_NUMBER || /[0-9]/.test(val),
-    'Kata sandi harus mengandung angka'
-  )
-  .refine(
-    (val) =>
-      !Validation.PASSWORD_REQUIRE_SPECIAL || /[!@#$%^&*(),.?":{}|<>]/.test(val),
-    'Kata sandi harus mengandung minimal satu karakter spesial'
-  )
+
 
 const captcha = z.string().min(1, 'Captcha tidak boleh kosong')
 
@@ -75,17 +48,11 @@ export const RegisterSchema = z
     identityNumber,
     email,
     emailConfirm: z.string(),
-    password,
-    passwordConfirm: z.string(),
     captcha,
   })
   .refine((data) => data.email === data.emailConfirm, {
     message: 'Email tidak sama',
     path: ['emailConfirm'],
-  })
-  .refine((data) => data.password === data.passwordConfirm, {
-    message: 'Kata sandi tidak sama',
-    path: ['passwordConfirm'],
   })
 
 export type RegisterFormData = z.infer<typeof RegisterSchema>
@@ -96,8 +63,6 @@ export type RegisterFormErrors = Partial<
     | 'identityNumber'
     | 'email'
     | 'emailConfirm'
-    | 'password'
-    | 'passwordConfirm'
     | 'captcha',
     string
   >
@@ -108,8 +73,6 @@ const REGISTER_FIELD_KEYS: (keyof RegisterFormErrors)[] = [
   'identityNumber',
   'email',
   'emailConfirm',
-  'password',
-  'passwordConfirm',
   'captcha',
 ]
 
@@ -118,8 +81,6 @@ export function validateRegisterForm(input: {
   identityNumber: string
   email: string
   emailConfirm: string
-  password: string
-  passwordConfirm: string
   captcha: string
 }):
   | { success: true; data: RegisterFormData }

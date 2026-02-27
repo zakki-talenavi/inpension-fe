@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /* eslint-disable vue/no-undef-components */
 defineProps<{
-  captchaImg: string
+  captchaImg: string | null
   invalid?: boolean
   errorMessage?: string
   inputId?: string
@@ -22,16 +22,18 @@ const model = defineModel<string>({ default: '' })
       :for="inputId ?? 'captcha-input'"
       class="mb-2 block text-sm font-medium text-gray-800"
     >
-      Captcha <span class="text-red-500">*</span>
+      Captcha
     </label>
     <!-- Area gambar captcha lebih besar agar mudah dibaca -->
     <div class="mb-3 flex min-h-20 items-center justify-center overflow-hidden px-4 py-3">
       <img
+        v-if="captchaImg"
         :src="captchaImg"
         alt="Captcha"
         class="block max-h-20 w-auto max-w-full object-contain"
         aria-hidden="true"
       >
+      <Skeleton v-else width="14rem" height="4.5rem" class="rounded-sm" />
     </div>
     <!-- InputGroup: input + tombol refresh di kanan (satu unit) -->
     <InputGroup>
@@ -46,15 +48,13 @@ const model = defineModel<string>({ default: '' })
         aria-label="Masukkan kode captcha"
         @keyup.enter="$emit('refresh')"
       />
-      <InputGroupAddon>
-        <Button
-          type="button"
-          icon="pi pi-refresh"
-          aria-label="Perbarui captcha"
-          severity="secondary"
-          @click="$emit('refresh')"
-        />
-      </InputGroupAddon>
+      <Button
+        type="button"
+        icon="pi pi-refresh"
+        aria-label="Perbarui captcha"
+        class="w-12 flex items-center justify-center !bg-[#52629d] !border-[#52629d] !text-white hover:!bg-[#435180] hover:!border-[#435180] !rounded-l-none !rounded-r-md transition-colors"
+        @click="$emit('refresh')"
+      />
     </InputGroup>
     <small
       v-if="invalid && errorMessage"

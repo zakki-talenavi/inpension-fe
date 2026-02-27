@@ -18,14 +18,14 @@ export interface LoginRequest {
 
 export interface LoginResponse {
     user: User
-    accessToken: string
-    refreshToken?: string
+    access_token: string
+    refresh_token?: string
 }
 
 export interface RegisterRequest {
     name: string
     email: string
-    password: string
+    password?: string
     role: string
     /** Optional: identity number / NIK */
     identityNumber?: string
@@ -33,8 +33,8 @@ export interface RegisterRequest {
 
 export interface RegisterResponse {
     user: User
-    accessToken: string
-    refreshToken?: string
+    access_token: string
+    refresh_token?: string
 }
 
 export interface MeResponse {
@@ -51,13 +51,19 @@ export interface RefreshResponse {
 }
 
 export interface CaptchaResponse {
-    key: string
-    image: string
+    captcha_id: string
+    image_base64: string
+    image_type: string
 }
 
 /** Login */
 export function authLogin(payload: LoginRequest) {
-    return api.post<LoginResponse>(AUTH_ENDPOINTS.login, payload)
+    return api.post<LoginResponse>(AUTH_ENDPOINTS.login, {
+        username: payload.email,
+        password: payload.password,
+        captcha_id: payload.captchaKey,
+        captcha_answer: payload.captcha
+    })
 }
 
 /** Register */

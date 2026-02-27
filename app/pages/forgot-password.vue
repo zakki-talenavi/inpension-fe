@@ -10,10 +10,7 @@ defineOptions({ name: 'ForgotPasswordPage' })
 const { roleKey } = useLoginRole()
 const router = useRouter()
 const notification = useNotification()
-const { captchaImage, fetchCaptcha } = useCaptcha()
-
 const emailOrId = ref('')
-const captcha = ref('')
 const errors = ref<ForgotPasswordFormErrors>({})
 const loading = ref(false)
 
@@ -22,7 +19,6 @@ const loginRoute = computed(() => ({ path: '/login', query: roleKey.value ? { ac
 async function onSubmit() {
   const result = validateForgotPasswordForm({
     emailOrId: emailOrId.value,
-    captcha: captcha.value,
   })
   if (!result.success) {
     errors.value = result.fieldErrors
@@ -42,29 +38,31 @@ async function onSubmit() {
     notification.error('Gagal mengirim permintaan. Silakan coba lagi.')
   } finally {
     loading.value = false
-    captcha.value = ''
-    fetchCaptcha()
   }
 }
 </script>
 
 <template>
   <AuthSplitLayout>
-    <div class="flex flex-1 flex-col items-center justify-center px-4 py-6 sm:px-6 sm:py-8 lg:px-10">
-      <div class="w-full max-w-md">
+    <div class="flex flex-1 flex-col px-4 py-6 sm:px-8 lg:px-10">
+      <!-- Tombol Kembali di sudut kiri atas -->
+      <div class="w-full mb-auto pb-4">
         <NuxtLink
           :to="loginRoute"
-          class="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-900"
+          class="inline-flex items-center gap-2 text-[0.875rem] font-medium text-gray-700 hover:text-gray-900 transition-colors"
         >
-          <i class="pi pi-arrow-left" />
+          <i class="pi pi-arrow-left text-[0.8rem]" />
           Kembali
         </NuxtLink>
+      </div>
 
-        <h1 class="mb-1 text-center text-2xl font-bold tracking-tight text-gray-900">
-          Lupa Kata Sandi
+      <div class="w-full max-w-md mx-auto my-auto pb-10">
+
+        <h1 class="mb-1 text-center text-[1.15rem] sm:text-lg font-bold tracking-tight text-gray-800 uppercase">
+          Lupa Kata Sandi!
         </h1>
-        <p class="mb-6 text-center text-[0.9375rem] font-medium text-gray-600">
-          Masukkan email atau ID peserta untuk mengirim tautan reset kata sandi
+        <p class="mb-6 text-center text-[0.875rem] font-medium text-gray-700">
+          Harap masukkan Email atau ID Peserta Anda untuk mencari akun Anda
         </p>
 
         <form class="auth-form flex w-full flex-col" @submit.prevent="onSubmit">
@@ -82,20 +80,11 @@ async function onSubmit() {
             <small v-if="errors.emailOrId" class="mt-1 block text-sm text-red-600">{{ errors.emailOrId }}</small>
           </div>
 
-          <div class="mb-6">
-            <CaptchaFormBlock
-              v-model="captcha"
-              :captcha-img="captchaImage"
-              :invalid="!!errors.captcha"
-              :error-message="errors.captcha"
-              input-id="forgot-captcha"
-              @refresh="fetchCaptcha()"
-            />
-          </div>
+
 
           <Button
             type="submit"
-            label="Kirim tautan reset"
+            label="Cari"
             class="auth-btn w-full justify-center py-3"
             :loading="loading"
             loading-icon="pi pi-spin pi-spinner"

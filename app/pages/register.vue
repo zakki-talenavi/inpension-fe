@@ -17,8 +17,6 @@ const fullName = ref('')
 const identityNumber = ref('')
 const email = ref('')
 const emailConfirm = ref('')
-const password = ref('')
-const passwordConfirm = ref('')
 const captcha = ref('')
 const errors = ref<RegisterFormErrors>({})
 
@@ -31,8 +29,6 @@ async function onSubmit() {
     identityNumber: identityNumber.value,
     email: email.value,
     emailConfirm: emailConfirm.value,
-    password: password.value,
-    passwordConfirm: passwordConfirm.value,
     captcha: captcha.value,
   })
   if (!result.success) {
@@ -44,7 +40,7 @@ async function onSubmit() {
     await authStore.register({
       name: result.data.fullName,
       email: result.data.email,
-      password: result.data.password,
+      password: '',
       role: roleKey.value === 'dplk' ? 'DPLK' : roleKey.value === 'company' ? 'COMPANY' : 'PERSONAL',
     })
     await router.push(roleKey.value ? `/scope/${roleKey.value}` : '/')
@@ -59,26 +55,30 @@ async function onSubmit() {
 
 <template>
   <AuthSplitLayout>
-    <div class="flex flex-1 flex-col items-center justify-center px-4 py-6 sm:px-6 sm:py-8 lg:px-10">
-      <div class="w-full max-w-md">
+    <div class="flex flex-1 flex-col px-4 py-6 sm:px-8 lg:px-10">
+      <!-- Tombol Kembali di sudut kiri atas -->
+      <div class="w-full mb-auto pb-4">
         <NuxtLink
           :to="loginRoute"
-          class="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-900"
+          class="inline-flex items-center gap-2 text-[0.875rem] font-medium text-gray-700 hover:text-gray-900 transition-colors"
         >
-          <i class="pi pi-arrow-left" />
+          <i class="pi pi-arrow-left text-[0.8rem]" />
           Kembali
         </NuxtLink>
+      </div>
+
+      <div class="w-full max-w-md mx-auto my-auto pb-2">
 
         <h1 class="mb-1 text-center text-2xl font-bold tracking-tight text-gray-900">
           Buat Akun
         </h1>
-        <p class="mb-6 text-center text-[0.9375rem] font-medium text-gray-600">
+        <p class="mb-4 text-center text-[0.9375rem] font-medium text-gray-600">
           Selamat datang di portal DPLK
         </p>
 
         <form class="auth-form flex w-full flex-col" @submit.prevent="onSubmit">
-          <div class="mb-6">
-            <label for="reg-fullName" class="mb-2 block text-sm font-medium text-gray-800">Nama Lengkap <span class="text-red-500">*</span></label>
+          <div class="mb-3.5">
+            <label for="reg-fullName" class="mb-1.5 block text-sm font-medium text-gray-800">Nama Lengkap <span class="text-red-500">*</span></label>
             <InputText
               id="reg-fullName"
               v-model="fullName"
@@ -91,8 +91,8 @@ async function onSubmit() {
             <small v-if="errors.fullName" class="mt-1 block text-sm text-red-600">{{ errors.fullName }}</small>
           </div>
 
-          <div class="mb-6">
-            <label for="reg-identity" class="mb-2 block text-sm font-medium text-gray-800">No Identitas (NIK/KITAS) <span class="text-red-500">*</span></label>
+          <div class="mb-3.5">
+            <label for="reg-identity" class="mb-1.5 block text-sm font-medium text-gray-800">No Identitas (NIK/KITAS) <span class="text-red-500">*</span></label>
             <InputText
               id="reg-identity"
               v-model="identityNumber"
@@ -104,8 +104,8 @@ async function onSubmit() {
             <small v-if="errors.identityNumber" class="mt-1 block text-sm text-red-600">{{ errors.identityNumber }}</small>
           </div>
 
-          <div class="mb-6">
-            <label for="reg-email" class="mb-2 block text-sm font-medium text-gray-800">Email <span class="text-red-500">*</span></label>
+          <div class="mb-3.5">
+            <label for="reg-email" class="mb-1.5 block text-sm font-medium text-gray-800">Email <span class="text-red-500">*</span></label>
             <InputText
               id="reg-email"
               v-model="email"
@@ -118,8 +118,8 @@ async function onSubmit() {
             <small v-if="errors.email" class="mt-1 block text-sm text-red-600">{{ errors.email }}</small>
           </div>
 
-          <div class="mb-6">
-            <label for="reg-emailConfirm" class="mb-2 block text-sm font-medium text-gray-800">Ulangi Email <span class="text-red-500">*</span></label>
+          <div class="mb-3.5">
+            <label for="reg-emailConfirm" class="mb-1.5 block text-sm font-medium text-gray-800">Ulangi Email <span class="text-red-500">*</span></label>
             <InputText
               id="reg-emailConfirm"
               v-model="emailConfirm"
@@ -132,37 +132,9 @@ async function onSubmit() {
             <small v-if="errors.emailConfirm" class="mt-1 block text-sm text-red-600">{{ errors.emailConfirm }}</small>
           </div>
 
-          <div class="mb-6">
-            <label for="reg-password" class="mb-2 block text-sm font-medium text-gray-800">Kata Sandi <span class="text-red-500">*</span></label>
-            <Password
-              id="reg-password"
-              v-model="password"
-              placeholder="Masukkan kata sandi"
-              :feedback="false"
-              toggle-mask
-              input-class="w-full"
-              :class="{ 'p-invalid': errors.password }"
-              class="w-full"
-            />
-            <small v-if="errors.password" class="mt-1 block text-sm text-red-600">{{ errors.password }}</small>
-          </div>
 
-          <div class="mb-6">
-            <label for="reg-passwordConfirm" class="mb-2 block text-sm font-medium text-gray-800">Ulangi Kata Sandi <span class="text-red-500">*</span></label>
-            <Password
-              id="reg-passwordConfirm"
-              v-model="passwordConfirm"
-              placeholder="Masukkan ulang kata sandi"
-              :feedback="false"
-              toggle-mask
-              input-class="w-full"
-              :class="{ 'p-invalid': errors.passwordConfirm }"
-              class="w-full"
-            />
-            <small v-if="errors.passwordConfirm" class="mt-1 block text-sm text-red-600">{{ errors.passwordConfirm }}</small>
-          </div>
 
-          <div class="mb-6">
+          <div class="mb-3.5">
             <CaptchaFormBlock
               v-model="captcha"
               :captcha-img="captchaImage"

@@ -20,20 +20,22 @@ interface LoginCredentials {
 
 interface RegisterData {
   email: string
-  password: string
+  password?: string
   name: string
   role: string
   identityNumber?: string
 }
 
-/** Map API user to schema User (id, email, fullName, role). Accepts fullName or name. */
-function toSchemaUser(apiUser: { id: string; email: string; fullName?: string; name?: string; role: string }): User {
-  const fullName = apiUser.fullName ?? apiUser.name ?? ''
+/** Map API user to schema User. Tolerates various backend property namings. */
+function toSchemaUser(apiUser: Record<string, any>): User {
+  const fullName = apiUser.fullName ?? apiUser.name ?? apiUser.username ?? 'Unknown'
+  const role = apiUser.role ?? apiUser.role_code ?? apiUser.role_name ?? 'UNKNOWN'
+
   return UserSchema.parse({
     id: apiUser.id,
     email: apiUser.email,
     fullName,
-    role: apiUser.role,
+    role,
   })
 }
 
@@ -57,15 +59,15 @@ export const useAuthStore = defineStore('auth', () => {
         captchaKey: credentials.captchaKey,
         captcha: credentials.captcha,
       })
-      const { user: apiUser, accessToken, refreshToken } = res.data
+      const { user: apiUser, access_token, refresh_token } = res.data
       const validated = toSchemaUser(apiUser)
-      setAccessToken(accessToken)
-      if (refreshToken) setRefreshToken(refreshToken)
+      setAccessToken(access_token)
+      if (refresh_token) setRefreshToken(refresh_token)
       user.value = validated
-      token.value = accessToken
+      token.value = access_token
       const tokenCookie = useCookie('auth_token')
-      tokenCookie.value = accessToken
-      return { user: validated, token: accessToken }
+      tokenCookie.value = access_token
+      return { user: validated, token: access_token }
     } catch (err: unknown) {
       const apiErr = err as ApiError
       error.value = apiErr?.message ?? (err instanceof Error ? err.message : 'Login failed')
@@ -82,19 +84,19 @@ export const useAuthStore = defineStore('auth', () => {
       const res = await authRegister({
         name: data.name,
         email: data.email,
-        password: data.password,
+        password: data.password || '',
         role: data.role,
         identityNumber: data.identityNumber,
       })
-      const { user: apiUser, accessToken, refreshToken } = res.data
+      const { user: apiUser, access_token, refresh_token } = res.data
       const validated = toSchemaUser(apiUser)
-      setAccessToken(accessToken)
-      if (refreshToken) setRefreshToken(refreshToken)
+      setAccessToken(access_token)
+      if (refresh_token) setRefreshToken(refresh_token)
       user.value = validated
-      token.value = accessToken
+      token.value = access_token
       const tokenCookie = useCookie('auth_token')
-      tokenCookie.value = accessToken
-      return { user: validated, token: accessToken }
+      tokenCookie.value = access_token
+      return { user: validated, token: access_token }
     } catch (err: unknown) {
       const apiErr = err as ApiError
       error.value = apiErr?.message ?? (err instanceof Error ? err.message : 'Registration failed')

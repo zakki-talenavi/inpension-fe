@@ -29,9 +29,9 @@ defineOptions({ name: 'AuthSplitLayout' })
       </NuxtLink>
 
       <!-- Login Caption (Bottom Half) -->
-      <div class="flex flex-1 flex-col justify-center px-10 xl:px-15 w-full text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-        <span class="block capitalize mb-1 leading-snug tracking-wide text-[35px] font-medium">Siapkan Masa Depan Anda Bersama Inpension</span>
-        <span class="block capitalize leading-snug tracking-wide opacity-95 text-[25px] font-normal">Rencanakan sekarang, sejahtera nanti</span>
+      <div class="flex flex-1 flex-col justify-center px-10 xl:px-18 w-full text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+        <span class="block capitalize mb-8 leading-snug tracking-wide text-[35px] font-medium">Siapkan Masa Depan Anda Bersama Inpension</span>
+        <span class="block capitalize leading-snug tracking-wide opacity-95 text-[25px] mb-16 font-normal">Rencanakan sekarang, sejahtera nanti</span>
       </div>
     </div>
 
