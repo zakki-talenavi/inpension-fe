@@ -63,13 +63,13 @@ async function onSubmit() {
 
 <template>
   <AuthSplitLayout>
-    <div class="flex flex-1 flex-col items-center justify-center px-4 py-6 sm:px-6 sm:py-8 lg:px-10">
-      <div class="w-full max-w-md">
-        <h1 class="mb-1 text-center text-2xl font-bold tracking-tight text-gray-900">
+    <div class="flex flex-1 flex-col items-center justify-center px-4 py-8 sm:px-6 lg:px-8">
+      <div class="w-full max-w-[400px]">
+        <h1 class="mb-1 text-center text-lg sm:text-[1.15rem] font-bold tracking-tight text-gray-800 uppercase">
           Selamat Datang Kembali!
         </h1>
-        <p class="mb-6 text-center text-[0.9375rem] font-medium text-gray-600">
-          Silakan login dengan akun Anda
+        <p class="mb-10 text-center text-[0.875rem] font-medium text-gray-700">
+          Silahkan Login Dengan
         </p>
 
         <form
@@ -77,16 +77,16 @@ async function onSubmit() {
           aria-label="Form login"
           @submit.prevent="onSubmit"
         >
-          <div class="mb-6">
-            <label for="login-email" class="mb-2 block text-sm font-medium text-gray-800">
-              Email / ID DPLK <span class="text-red-500">*</span>
+          <div class="mb-5">
+            <label for="login-email" class="mb-1.5 block text-[0.85rem] font-medium text-gray-800">
+              Email / NIK
             </label>
             <InputText
               id="login-email"
               v-model="email"
               type="text"
-              placeholder="Masukkan email atau ID DPLK"
-              class="w-full"
+              placeholder="Email"
+              class="w-full !rounded-sm !border-gray-300 focus:!border-[#b59cc7] focus:!shadow-[0_0_0_1px_rgba(181,156,199,0.4)] transition-colors"
               :class="{ 'p-invalid': errors.email }"
               autocomplete="username"
               autofocus
@@ -105,17 +105,17 @@ async function onSubmit() {
             </small>
           </div>
 
-          <div class="mb-6">
-            <label for="login-password" class="mb-2 block text-sm font-medium text-gray-800">
-              Kata Sandi <span class="text-red-500">*</span>
+          <div class="mb-5">
+            <label for="login-password" class="mb-1.5 block text-[0.85rem] font-medium text-gray-800">
+              Kata Sandi
             </label>
             <Password
               id="login-password"
               v-model="password"
-              placeholder="Masukkan kata sandi"
+              placeholder="Kata Sandi"
               :feedback="false"
               toggle-mask
-              input-class="w-full"
+              input-class="w-full !rounded-sm !border-gray-300 focus:!border-[#b59cc7] focus:!shadow-[0_0_0_1px_rgba(181,156,199,0.4)] transition-colors"
               :class="{ 'p-invalid': errors.password }"
               class="w-full"
               aria-required="true"
@@ -144,29 +144,31 @@ async function onSubmit() {
           <Button
             type="submit"
             label="Masuk"
-            class="auth-btn w-full justify-center py-3"
+            class="w-full justify-center py-2.5 mt-2 !font-normal !bg-[#52629d] !border-[#52629d] !text-white !rounded-sm hover:!bg-[#3f4a7c] hover:!border-[#3f4a7c] transition-colors"
             :loading="authStore.loading"
             :disabled="!canSubmit"
             loading-icon="pi pi-spin pi-spinner"
             :aria-busy="authStore.loading"
             aria-label="Submit login"
           />
-        </form>
 
-        <div class="mt-6 space-y-2 text-center text-sm text-gray-500">
-          <NuxtLink
-            :to="{ path: '/forgot-password', query: roleKey ? { access: roleKey } : undefined }"
-            class="block font-medium text-primary hover:underline"
-          >
-            Lupa kata sandi?
-          </NuxtLink>
-          <p v-if="isPersonal">
-            Belum punya akun?
-            <NuxtLink to="/register" class="font-medium text-primary hover:underline">Daftar</NuxtLink>
-          </p>
-        </div>
+          <div class="mt-4 text-center">
+            <NuxtLink
+              :to="{ path: '/forgot-password', query: roleKey ? { access: roleKey } : undefined }"
+              class="inline-block text-[0.8rem] font-medium text-[#7d90b4] hover:text-[#52629d] hover:underline"
+            >
+              Lupa Kata Sandi?
+            </NuxtLink>
+            
+            <p v-if="isPersonal" class="mt-3 text-sm text-gray-500">
+              Belum punya akun?
+              <NuxtLink to="/register" class="font-medium text-[#52629d] hover:underline">Daftar</NuxtLink>
+            </p>
+          </div>
+        </form>
       </div>
     </div>
   </AuthSplitLayout>
 </template>
+
 
