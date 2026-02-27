@@ -67,18 +67,18 @@ async function onSubmit() {
         </NuxtLink>
       </div>
 
-      <div class="w-full max-w-md mx-auto my-auto pb-2">
+      <div class="w-full max-w-md mx-auto my-auto pb-10">
 
         <h1 class="mb-1 text-center text-2xl font-bold tracking-tight text-gray-900">
           Buat Akun
         </h1>
-        <p class="mb-4 text-center text-[0.9375rem] font-medium text-gray-600">
+        <p class="mb-6 text-center text-[0.9375rem] font-medium text-gray-600">
           Selamat datang di portal DPLK
         </p>
 
         <form class="auth-form flex w-full flex-col" @submit.prevent="onSubmit">
-          <div class="mb-3.5">
-            <label for="reg-fullName" class="mb-1.5 block text-sm font-medium text-gray-800">Nama Lengkap <span class="text-red-500">*</span></label>
+          <div class="mb-6">
+            <label for="reg-fullName" class="mb-2 block text-sm font-medium text-gray-800">Nama Lengkap <span class="text-red-500">*</span></label>
             <InputText
               id="reg-fullName"
               v-model="fullName"
@@ -91,8 +91,8 @@ async function onSubmit() {
             <small v-if="errors.fullName" class="mt-1 block text-sm text-red-600">{{ errors.fullName }}</small>
           </div>
 
-          <div class="mb-3.5">
-            <label for="reg-identity" class="mb-1.5 block text-sm font-medium text-gray-800">No Identitas (NIK/KITAS) <span class="text-red-500">*</span></label>
+          <div class="mb-6">
+            <label for="reg-identity" class="mb-2 block text-sm font-medium text-gray-800">No Identitas (NIK/KITAS) <span class="text-red-500">*</span></label>
             <InputText
               id="reg-identity"
               v-model="identityNumber"
@@ -104,8 +104,8 @@ async function onSubmit() {
             <small v-if="errors.identityNumber" class="mt-1 block text-sm text-red-600">{{ errors.identityNumber }}</small>
           </div>
 
-          <div class="mb-3.5">
-            <label for="reg-email" class="mb-1.5 block text-sm font-medium text-gray-800">Email <span class="text-red-500">*</span></label>
+          <div class="mb-6">
+            <label for="reg-email" class="mb-2 block text-sm font-medium text-gray-800">Email <span class="text-red-500">*</span></label>
             <InputText
               id="reg-email"
               v-model="email"
@@ -118,8 +118,8 @@ async function onSubmit() {
             <small v-if="errors.email" class="mt-1 block text-sm text-red-600">{{ errors.email }}</small>
           </div>
 
-          <div class="mb-3.5">
-            <label for="reg-emailConfirm" class="mb-1.5 block text-sm font-medium text-gray-800">Ulangi Email <span class="text-red-500">*</span></label>
+          <div class="mb-6">
+            <label for="reg-emailConfirm" class="mb-2 block text-sm font-medium text-gray-800">Ulangi Email <span class="text-red-500">*</span></label>
             <InputText
               id="reg-emailConfirm"
               v-model="emailConfirm"
@@ -134,7 +134,7 @@ async function onSubmit() {
 
 
 
-          <div class="mb-3.5">
+          <div class="mb-6">
             <CaptchaFormBlock
               v-model="captcha"
               :captcha-img="captchaImage"
