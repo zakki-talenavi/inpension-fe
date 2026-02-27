@@ -7,6 +7,7 @@ import {
   setRefreshToken,
   clearTokens,
   getAccessToken,
+  getRefreshToken,
 } from '~/services/api/interceptors'
 import { authLogin, authRegister, authMe } from '~/services/api/auth'
 import type { ApiError } from '~/services/api/client'
@@ -67,6 +68,8 @@ export const useAuthStore = defineStore('auth', () => {
       token.value = access_token
       const tokenCookie = useCookie('auth_token')
       tokenCookie.value = access_token
+      const refreshCookie = useCookie('refresh_token')
+      refreshCookie.value = refresh_token ?? null
       return { user: validated, token: access_token }
     } catch (err: unknown) {
       const apiErr = err as ApiError
@@ -111,9 +114,13 @@ export const useAuthStore = defineStore('auth', () => {
     error.value = null
     try {
       const tokenCookie = useCookie('auth_token')
+      const refreshCookie = useCookie('refresh_token')
       const storedToken = getAccessToken() ?? tokenCookie.value
       if (!storedToken) return
       setAccessToken(storedToken)
+      // Also restore refresh token for SSR
+      const storedRefresh = getRefreshToken() ?? refreshCookie.value
+      if (storedRefresh) setRefreshToken(storedRefresh)
       const res = await authMe()
       const validated = toSchemaUser(res.data as unknown as Record<string, any>)
       user.value = validated
@@ -138,6 +145,8 @@ export const useAuthStore = defineStore('auth', () => {
     error.value = null
     const tokenCookie = useCookie('auth_token')
     tokenCookie.value = null
+    const refreshCookie = useCookie('refresh_token')
+    refreshCookie.value = null
   }
 
   return {

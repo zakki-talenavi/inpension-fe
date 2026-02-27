@@ -51,12 +51,15 @@ export interface MeResponse {
 }
 
 export interface RefreshRequest {
-    refreshToken: string
+    refresh_token: string
 }
 
 export interface RefreshResponse {
-    accessToken: string
-    refreshToken?: string
+    access_token: string
+    refresh_token?: string
+    token_type: string
+    expires_in: number
+    user: User
 }
 
 export interface CaptchaResponse {
@@ -87,7 +90,9 @@ export function authMe() {
 
 /** Refresh access token */
 export function authRefresh(payload: RefreshRequest) {
-    return api.post<RefreshResponse>(AUTH_ENDPOINTS.refresh, payload)
+    return api.post<RefreshResponse>(AUTH_ENDPOINTS.refresh, {
+        refresh_token: payload.refresh_token,
+    })
 }
 
 /** Validate token (optional) */

@@ -1,32 +1,38 @@
 import { defineNuxtRouteMiddleware, navigateTo, useCookie } from 'nuxt/app'
 import { useAuthStore } from '~/stores/auth/useAuthStore'
+import { clearTokens } from '~/services/api/interceptors'
 
 export default defineNuxtRouteMiddleware(async (to) => {
   const authStore = useAuthStore()
   const token = useCookie('auth_token')
 
-  // All routes that unauthenticated users can access
-  const publicRoutes = ['/', '/login', '/register', '/forgot-password']
+  // Pages that require NO authentication (guest-only)
+  const guestOnlyRoutes = ['/login', '/register', '/forgot-password']
+  // Pages accessible by anyone (no redirect)
+  const publicRoutes = ['/', ...guestOnlyRoutes]
   const isPublicRoute = publicRoutes.includes(to.path)
+  const isGuestOnly = guestOnlyRoutes.includes(to.path)
 
-  // AUTHENTICATED user trying to access public pages → redirect to dashboard
-  if (token.value && isPublicRoute) {
+  // AUTHENTICATED user on guest-only pages (login/register) → redirect to dashboard
+  if (token.value && isGuestOnly) {
     return navigateTo('/dashboard')
   }
 
-  // UNAUTHENTICATED user trying to access protected pages → redirect to home
-  if (!token.value && !isPublicRoute) {
+  // Public route (including /) → allow through without checking token validity
+  if (isPublicRoute) return
+
+  // UNAUTHENTICATED user on protected page → redirect to home
+  if (!token.value) {
     return navigateTo('/')
   }
 
-  // AUTHENTICATED user on protected page → ensure user data is loaded
-  if (token.value && !isPublicRoute && !authStore.user) {
+  if (!authStore.user) {
     try {
       await authStore.fetchCurrentUser()
     } catch {
+      clearTokens()
       token.value = null
       return navigateTo('/')
     }
   }
 })
-

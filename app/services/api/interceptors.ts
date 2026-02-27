@@ -8,6 +8,7 @@ const REFRESH_TOKEN_KEY = 'refresh_token'
 
 // In-memory fallback for SSR (server-side) where localStorage is unavailable
 let _memoryToken: string | null = null
+let _memoryRefreshToken: string | null = null
 
 function isClient(): boolean {
     return typeof window !== 'undefined'
@@ -24,7 +25,7 @@ export function getRefreshToken(): string | null {
     if (isClient()) {
         return localStorage.getItem(REFRESH_TOKEN_KEY) || null
     }
-    return null
+    return _memoryRefreshToken
 }
 
 export function setAccessToken(token: string): void {
@@ -35,12 +36,15 @@ export function setAccessToken(token: string): void {
 }
 
 export function setRefreshToken(token: string): void {
+    _memoryRefreshToken = token
     if (isClient()) {
         localStorage.setItem(REFRESH_TOKEN_KEY, token)
     }
 }
 
 export function clearTokens(): void {
+    _memoryToken = null
+    _memoryRefreshToken = null
     if (isClient()) {
         localStorage.removeItem(TOKEN_KEY)
         localStorage.removeItem(REFRESH_TOKEN_KEY)

@@ -91,14 +91,14 @@ async function tryRefreshAndRetry(
 ): Promise<unknown> {
     const refreshToken = getRefreshToken()
     if (!refreshToken) throw null
-    const refreshed = await $fetch<ApiResponse<{ accessToken: string; refreshToken?: string }>>(
+    const refreshed = await $fetch<ApiResponse<{ access_token: string; refresh_token?: string }>>(
         `${baseURL}${AUTH_ENDPOINTS.refresh}`,
-        { method: 'POST', body: { refreshToken }, headers: { ...defaultHeaders } }
+        { method: 'POST', body: { refresh_token: refreshToken }, headers: { ...defaultHeaders } }
     )
-    const accessToken = refreshed.data?.accessToken
+    const accessToken = refreshed.data?.access_token
     if (!accessToken) throw null
     setAccessToken(accessToken)
-    if (refreshed.data?.refreshToken) setRefreshToken(refreshed.data.refreshToken)
+    if (refreshed.data?.refresh_token) setRefreshToken(refreshed.data.refresh_token)
     opts._retry = true
     if (opts.headers && typeof opts.headers === 'object' && !Array.isArray(opts.headers)) {
         (opts.headers as Record<string, string>).Authorization = `Bearer ${accessToken}`
@@ -129,7 +129,7 @@ function createApiFetch(config: ApiClientConfig = {}): ApiFetchFn {
             const token = getAccessToken()
             if (token) setAuthHeader(options as { headers?: Headers | Record<string, string> }, token)
             if (isDev()) {
-                ;(options as unknown as { _startTime?: number })._startTime = Date.now()
+                ; (options as unknown as { _startTime?: number })._startTime = Date.now()
             }
         },
         onResponse({ response, options }) {
