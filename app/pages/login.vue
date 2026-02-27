@@ -86,7 +86,7 @@ async function onSubmit() {
               v-model="email"
               type="text"
               placeholder="Email"
-              class="w-full !rounded-sm !border-gray-300 focus:!border-[#b59cc7] focus:!shadow-[0_0_0_1px_rgba(181,156,199,0.4)] transition-colors"
+              class="w-full transition-colors"
               :class="{ 'p-invalid': errors.email }"
               autocomplete="username"
               autofocus
@@ -115,7 +115,7 @@ async function onSubmit() {
               placeholder="Kata Sandi"
               :feedback="false"
               toggle-mask
-              input-class="w-full !rounded-sm !border-gray-300 focus:!border-[#b59cc7] focus:!shadow-[0_0_0_1px_rgba(181,156,199,0.4)] transition-colors"
+              input-class="w-full transition-colors"
               :class="{ 'p-invalid': errors.password }"
               class="w-full"
               aria-required="true"

@@ -68,6 +68,9 @@ export default defineNuxtConfig({
       ripple: true,
       theme: {
         preset: Aura,
+        options: {
+          darkModeSelector: 'none',
+        }
       },
     },
     components: {

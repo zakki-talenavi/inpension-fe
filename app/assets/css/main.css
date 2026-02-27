@@ -44,21 +44,23 @@ body {
   font-family: var(--font-sans);
 }
 
-/* ---------- Auth form (login, register, forgot-password): plain CSS agar tidak glitch on load ---------- */
-.auth-form .p-inputtext,
-.auth-form input[type="text"],
-.auth-form input[type="email"],
-.auth-form input[type="password"] {
-  min-height: 2.75rem;
-  width: 100%;
-  border-radius: 0.5rem;
-  border: 1px solid #e5e7eb;
-  background-color: #fff;
-  padding: 0.75rem 1rem;
-  color: #111827;
-  outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
+/* Override PrimeVue Aura primary colors to #52629d */
+:root {
+  --p-primary-50: #eef1f6;
+  --p-primary-100: #dadded;
+  --p-primary-200: #b9becf;
+  --p-primary-300: #9ba0b4;
+  --p-primary-400: #7e849b;
+  --p-primary-500: #52629d;
+  --p-primary-600: #435181;
+  --p-primary-700: #354066;
+  --p-primary-800: #262e4a;
+  --p-primary-900: #171b2d;
+  --p-primary-950: #0e111b;
 }
+
+/* ---------- Auth form (login, register, forgot-password): plain CSS agar tidak glitch on load ---------- */
+
 
 .auth-form input:-webkit-autofill,
 .auth-form input:-webkit-autofill:hover,
@@ -69,17 +71,10 @@ body {
   transition: background-color 5000s ease-in-out 0s;
 }
 
-.auth-form .p-inputtext:focus,
+.auth-form .p-inputtext:enabled:focus,
 .auth-form input:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-primary-ring);
-}
-
-.auth-form .p-inputgroup .p-inputtext {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  border-top-left-radius: 0.5rem;
-  border-bottom-left-radius: 0.5rem;
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 1px var(--color-primary) !important;
 }
 
 .auth-form .p-invalid .p-inputtext,
