@@ -24,7 +24,20 @@ function handleAction(role: RoleOption, action: { type: RoleActionType; label: s
   }
   if (action.type === 'with_inventory') {
     isLoading.value = true
-    goAccess(role.key)
+    
+    localStorage.setItem('investpro_login_pending', String(Date.now()))
+    
+    const config = useRuntimeConfig()
+    const gatewayBaseUrl = (config.public as any).investproGatewayUrl || 'https://uatinvestasi.investpro.id/gateway'
+  
+    const authUrl = new URL(`${gatewayBaseUrl}/oauth/authorize`)
+    authUrl.searchParams.set('response_type', 'code')
+    authUrl.searchParams.set('client_id', 'inpension')
+    authUrl.searchParams.set('redirect_uri', window.location.origin + '/scope/dplk')
+    authUrl.searchParams.set('scope', 'openid read write trust')
+    
+    window.location.href = authUrl.toString()
+    return
   }
 }
 </script>

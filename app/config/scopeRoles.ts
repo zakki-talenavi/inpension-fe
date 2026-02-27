@@ -23,7 +23,7 @@ export const SCOPE_ROLE_DEFINITIONS: ScopeRoleDefinition[] = [
     image: '/assets/layout/images/lp/admin.png',
     actions: [
       { type: 'login', label: 'Log In' },
-      { type: 'with_inventory', label: 'With Inventory' },
+      { type: 'with_inventory', label: 'With Investpro' },
     ],
   },
   {
