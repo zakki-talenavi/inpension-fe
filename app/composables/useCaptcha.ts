@@ -1,13 +1,21 @@
+import { authCaptcha } from '~/services/api/auth'
 
 export function useCaptcha() {
   const captchaKey = ref<string | null>(null)
   const captchaImage = ref<string | null>(null)
   const loading = ref(false)
 
+  let _lastFetch = 0
+
   async function fetchCaptcha() {
+    const now = Date.now()
+    // Debounce/throttle: prevent fetching more than once per second
+    // Also protect against concurrent fetch calls
+    if (now - _lastFetch < 1000 || loading.value) return
+    _lastFetch = now
+
     loading.value = true
     try {
-      const { authCaptcha } = await import('~/services/api/auth')
       const res = await authCaptcha()
       captchaKey.value = res.data.captcha_id
       captchaImage.value = res.data.image_base64

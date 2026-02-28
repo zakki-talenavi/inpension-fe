@@ -15,6 +15,7 @@ const authStore = useAuthStore()
 const roles = useRoleOptions()
 
 const { captchaKey, captchaImage, fetchCaptcha } = useCaptcha()
+const notification = useNotification()
 const email = ref('')
 const password = ref('')
 const captcha = ref('')
@@ -52,8 +53,10 @@ async function onSubmit() {
       captcha: result.data.captcha,
     })
     await router.push(currentRoleRouting.value)
-  } catch {
-    // Error shown by store / toast
+  } catch (err: any) {
+    notification.error(err?.message || 'Login gagal', {
+      title: 'Gagal',
+    })
   } finally {
     captcha.value = ''
     fetchCaptcha()

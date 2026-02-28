@@ -9,7 +9,7 @@ import {
   getAccessToken,
   getRefreshToken,
 } from '~/services/api/interceptors'
-import { authLogin, authRegister, authMe } from '~/services/api/auth'
+import { authLogin, authMe } from '~/services/api/auth'
 import type { ApiError } from '~/services/api/client'
 
 interface LoginCredentials {
@@ -17,14 +17,6 @@ interface LoginCredentials {
   password: string
   captchaKey?: string
   captcha?: string
-}
-
-interface RegisterData {
-  email: string
-  password?: string
-  name: string
-  role: string
-  identityNumber?: string
 }
 
 /** Map API user to schema User. Tolerates various backend property namings. */
@@ -66,12 +58,6 @@ export const useAuthStore = defineStore('auth', () => {
       if (refresh_token) setRefreshToken(refresh_token)
       user.value = validated
       token.value = access_token
-      const maxAge = getJwtMaxAge(access_token)
-      const tokenCookie = useCookie('auth_token', { maxAge, path: '/' })
-      tokenCookie.value = access_token
-      const refreshMaxAge = refresh_token ? getJwtMaxAge(refresh_token) : maxAge
-      const refreshCookie = useCookie('refresh_token', { maxAge: refreshMaxAge, path: '/' })
-      refreshCookie.value = refresh_token ?? null
       return { user: validated, token: access_token }
     } catch (err: unknown) {
       const apiErr = err as ApiError
@@ -82,51 +68,17 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  async function register(data: RegisterData) {
-    loading.value = true
-    error.value = null
-    try {
-      const res = await authRegister({
-        name: data.name,
-        email: data.email,
-        password: data.password || '',
-        role: data.role,
-        identityNumber: data.identityNumber,
-      })
-      const { user: apiUser, access_token, refresh_token } = res.data
-      const validated = toSchemaUser(apiUser)
-      setAccessToken(access_token)
-      if (refresh_token) setRefreshToken(refresh_token)
-      user.value = validated
-      token.value = access_token
-      const maxAge = getJwtMaxAge(access_token)
-      const tokenCookie = useCookie('auth_token', { maxAge, path: '/' })
-      tokenCookie.value = access_token
-      const refreshMaxAge = refresh_token ? getJwtMaxAge(refresh_token) : maxAge
-      const refreshCookie = useCookie('refresh_token', { maxAge: refreshMaxAge, path: '/' })
-      refreshCookie.value = refresh_token ?? null
-      return { user: validated, token: access_token }
-    } catch (err: unknown) {
-      const apiErr = err as ApiError
-      error.value = apiErr?.message ?? (err instanceof Error ? err.message : 'Registration failed')
-      throw err
-    } finally {
-      loading.value = false
-    }
-  }
+  let _fetchPromise: Promise<void> | null = null
 
-  async function fetchCurrentUser() {
+  async function _doFetchCurrentUser() {
     loading.value = true
     error.value = null
     try {
-      const tokenCookie = useCookie('auth_token')
-      const refreshCookie = useCookie('refresh_token')
-      const storedToken = getAccessToken() ?? tokenCookie.value
+      const storedToken = getAccessToken()
       if (!storedToken) return
-      setAccessToken(storedToken)
-      // Also restore refresh token for SSR
-      const storedRefresh = getRefreshToken() ?? refreshCookie.value
-      if (storedRefresh) setRefreshToken(storedRefresh)
+
+      const storedRefresh = getRefreshToken()
+
       const res = await authMe()
       const validated = toSchemaUser(res.data as unknown as Record<string, any>)
       user.value = validated
@@ -136,12 +88,18 @@ export const useAuthStore = defineStore('auth', () => {
       clearTokens()
       user.value = null
       token.value = null
-      const tokenCookie = useCookie('auth_token')
-      tokenCookie.value = null
       throw err
     } finally {
       loading.value = false
     }
+  }
+
+  async function fetchCurrentUser() {
+    if (_fetchPromise) return _fetchPromise
+    _fetchPromise = _doFetchCurrentUser().finally(() => {
+      _fetchPromise = null
+    })
+    return _fetchPromise
   }
 
   async function logout() {
@@ -149,10 +107,6 @@ export const useAuthStore = defineStore('auth', () => {
     user.value = null
     token.value = null
     error.value = null
-    const tokenCookie = useCookie('auth_token')
-    tokenCookie.value = null
-    const refreshCookie = useCookie('refresh_token')
-    refreshCookie.value = null
   }
 
   return {
@@ -164,7 +118,6 @@ export const useAuthStore = defineStore('auth', () => {
     userRole,
     hasRole,
     login,
-    register,
     fetchCurrentUser,
     logout,
   }

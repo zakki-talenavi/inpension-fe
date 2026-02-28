@@ -6,60 +6,35 @@
 const TOKEN_KEY = 'auth_token'
 const REFRESH_TOKEN_KEY = 'refresh_token'
 import { getJwtMaxAge } from '~/utils/jwt'
-
-// In-memory fallback for SSR (server-side) where localStorage is unavailable
-let _memoryToken: string | null = null
-let _memoryRefreshToken: string | null = null
-
-function isClient(): boolean {
-    return typeof window !== 'undefined'
-}
+import { useCookie } from 'nuxt/app'
 
 export function getAccessToken(): string | null {
-    if (isClient()) {
-        return localStorage.getItem(TOKEN_KEY) || null
-    }
-    return _memoryToken
+    return useCookie<string | null>(TOKEN_KEY).value ?? null
 }
 
 export function getRefreshToken(): string | null {
-    if (isClient()) {
-        return localStorage.getItem(REFRESH_TOKEN_KEY) || null
-    }
-    return _memoryRefreshToken
+    return useCookie<string | null>(REFRESH_TOKEN_KEY).value ?? null
 }
 
 export function setAccessToken(token: string): void {
-    _memoryToken = token
-    if (isClient()) {
-        localStorage.setItem(TOKEN_KEY, token)
-        const maxAge = getJwtMaxAge(token)
-        document.cookie = `${TOKEN_KEY}=${token}; path=/; max-age=${maxAge}`
-    }
+    const maxAge = getJwtMaxAge(token)
+    const cookie = useCookie<string | null>(TOKEN_KEY, { maxAge, path: '/' })
+    cookie.value = token
 }
 
 export function setRefreshToken(token: string): void {
-    _memoryRefreshToken = token
-    if (isClient()) {
-        localStorage.setItem(REFRESH_TOKEN_KEY, token)
-        const maxAge = getJwtMaxAge(token)
-        document.cookie = `${REFRESH_TOKEN_KEY}=${token}; path=/; max-age=${maxAge}`
-    }
+    const maxAge = getJwtMaxAge(token)
+    const cookie = useCookie<string | null>(REFRESH_TOKEN_KEY, { maxAge, path: '/' })
+    cookie.value = token
 }
 
 export function clearTokens(): void {
-    _memoryToken = null
-    _memoryRefreshToken = null
-    if (isClient()) {
-        localStorage.removeItem(TOKEN_KEY)
-        localStorage.removeItem(REFRESH_TOKEN_KEY)
-        document.cookie = `${TOKEN_KEY}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`
-        document.cookie = `${REFRESH_TOKEN_KEY}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`
-    }
+    useCookie<string | null>(TOKEN_KEY).value = null
+    useCookie<string | null>(REFRESH_TOKEN_KEY).value = null
 }
 
 export function isAuthenticated(): boolean {
-    return getAccessToken() !== null
+    return !!getAccessToken()
 }
 
 export const tokenStorage = {

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 /* eslint-disable vue/no-undef-components -- PrimeVue components from @primevue/nuxt-module */
 import type { RegisterFormErrors } from '~/schemas/register'
-import { useAuthStore } from '~/stores/auth/useAuthStore'
 import { validateRegisterForm } from '~/schemas/register'
+import { authRegister } from '~/services/api/auth'
 import AuthSplitLayout from '~/components/AuthSplitLayout.vue'
 import CaptchaFormBlock from '../components/CaptchaFormBlock.vue'
 
@@ -10,8 +10,9 @@ defineOptions({ name: 'RegisterPage' })
 
 const { roleKey } = useLoginRole()
 const router = useRouter()
-const authStore = useAuthStore()
-const { captchaImage, fetchCaptcha } = useCaptcha()
+const { captchaKey, captchaImage, fetchCaptcha } = useCaptcha()
+const notification = useNotification()
+const loading = ref(false)
 
 const fullName = ref('')
 const identityNumber = ref('')
@@ -20,7 +21,6 @@ const emailConfirm = ref('')
 const captcha = ref('')
 const errors = ref<RegisterFormErrors>({})
 
-const registerRoute = computed(() => ({ path: '/register', query: roleKey.value ? { access: roleKey.value } : undefined }))
 const loginRoute = computed(() => ({ path: '/login', query: roleKey.value ? { access: roleKey.value } : undefined }))
 
 async function onSubmit() {
@@ -36,17 +36,31 @@ async function onSubmit() {
     return
   }
   errors.value = {}
+  loading.value = true
   try {
-    await authStore.register({
-      name: result.data.fullName,
+    const res = await authRegister({
+      username: result.data.fullName,
       email: result.data.email,
-      password: '',
-      role: roleKey.value === 'dplk' ? 'DPLK' : roleKey.value === 'company' ? 'COMPANY' : 'PERSONAL',
+      password: 'password123',
+      captcha_id: captchaKey.value ?? '',
+      captcha_answer: captcha.value.toUpperCase(),
     })
-    await router.push(roleKey.value ? `/scope/${roleKey.value}` : '/')
-  } catch {
-    // Error shown by store / toast
+    notification.success(res.message || 'Registrasi berhasil', {
+      title: 'Berhasil',
+    })
+    await router.push({
+      path: '/verification',
+      query: {
+        fullname: result.data.fullName,
+        email: result.data.email,
+      },
+    })
+  } catch (err: any) {
+    notification.error(err?.message || 'Registrasi gagal', {
+      title: 'Gagal',
+    })
   } finally {
+    loading.value = false
     captcha.value = ''
     fetchCaptcha()
   }
@@ -149,7 +163,7 @@ async function onSubmit() {
             type="submit"
             label="Daftar"
             class="auth-btn w-full justify-center py-3"
-            :loading="authStore.loading"
+            :loading="loading"
             loading-icon="pi pi-spin pi-spinner"
           />
         </form>

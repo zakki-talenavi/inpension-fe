@@ -23,12 +23,11 @@ export interface LoginResponse {
 }
 
 export interface RegisterRequest {
-    name: string
+    username: string
     email: string
-    password?: string
-    role: string
-    /** Optional: identity number / NIK */
-    identityNumber?: string
+    password: string
+    captcha_id: string
+    captcha_answer: string
 }
 
 export interface RegisterResponse {
@@ -80,7 +79,13 @@ export function authLogin(payload: LoginRequest) {
 
 /** Register */
 export function authRegister(payload: RegisterRequest) {
-    return api.post<RegisterResponse>(AUTH_ENDPOINTS.register, payload)
+    return api.post<RegisterResponse>(AUTH_ENDPOINTS.register, {
+        username: payload.username,
+        email: payload.email,
+        password: payload.password,
+        captcha_id: payload.captcha_id,
+        captcha_answer: payload.captcha_answer,
+    })
 }
 
 /** Get current user (requires Bearer token) */
@@ -103,4 +108,22 @@ export function authValidate() {
 /** Get captcha (key + image URL or base64) */
 export function authCaptcha(): Promise<ApiResponse<CaptchaResponse>> {
     return api.get<CaptchaResponse>(AUTH_ENDPOINTS.captcha)
+}
+
+/** Verify email with token and set new password */
+export interface VerifyEmailRequest {
+    token: string
+    new_password: string
+}
+
+export function authVerifyEmail(payload: VerifyEmailRequest) {
+    return api.post(AUTH_ENDPOINTS.verifyEmail, {
+        token: payload.token,
+        new_password: payload.new_password,
+    })
+}
+
+/** Resend verification code */
+export function authSendVerification(email: string) {
+    return api.post(AUTH_ENDPOINTS.sendVerification, { email })
 }

@@ -18,4 +18,6 @@ export const AUTH_ENDPOINTS = {
     validate: `${AUTH_PREFIX}/validate`,
     captcha: `${AUTH_PREFIX}/captcha`,
     forgotPassword: `${AUTH_PREFIX}/forgot-password`,
+    verifyEmail: `${AUTH_PREFIX}/verify-email`,
+    sendVerification: `${AUTH_PREFIX}/send-verification`,
 } as const

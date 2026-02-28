@@ -2,16 +2,16 @@ import { defineNuxtRouteMiddleware, navigateTo, useCookie } from 'nuxt/app'
 import { useAuthStore } from '~/stores/auth/useAuthStore'
 import { clearTokens } from '~/services/api/interceptors'
 
+// Define route sets outside the middleware for O(1) lookup and 1-time initialization
+const guestOnlyRoutes = new Set(['/login', '/register', '/forgot-password'])
+const publicRoutes = new Set(['/', '/verification', ...guestOnlyRoutes])
+
 export default defineNuxtRouteMiddleware(async (to) => {
   const authStore = useAuthStore()
   const token = useCookie('auth_token')
 
-  // Pages that require NO authentication (guest-only)
-  const guestOnlyRoutes = ['/login', '/register', '/forgot-password']
-  // Pages accessible by anyone (no redirect)
-  const publicRoutes = ['/', ...guestOnlyRoutes]
-  const isPublicRoute = publicRoutes.includes(to.path)
-  const isGuestOnly = guestOnlyRoutes.includes(to.path)
+  const isPublicRoute = publicRoutes.has(to.path)
+  const isGuestOnly = guestOnlyRoutes.has(to.path)
 
   // AUTHENTICATED user on guest-only pages (login/register) → redirect to dashboard
   if (token.value && isGuestOnly) {
