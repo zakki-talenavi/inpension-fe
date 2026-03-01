@@ -2,6 +2,10 @@
 /* eslint-disable vue/no-undef-components -- Card, Button from @primevue/nuxt-module */
 import type { RoleOption, RoleActionType } from '~/types/scope'
 
+definePageMeta({
+  middleware: 'guest'
+})
+
 const roles = useRoleOptions()
 const router = useRouter()
 const loginRoleCookie = useCookie<string | null>('login_role', { default: () => null })

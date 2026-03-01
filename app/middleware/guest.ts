@@ -18,7 +18,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
     if (isAuth && token) {
         // User is already authenticated, redirect to home or dashboard
         // You can customize the redirect path based on user role
-        const redirectPath = to.query.redirect as string || '/'
+        const redirectPath = to.query.redirect as string || '/dashboard'
 
         return navigateTo(redirectPath)
     }
