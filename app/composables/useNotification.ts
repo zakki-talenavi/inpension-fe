@@ -101,14 +101,16 @@ export function useNotification() {
             error: 'error',
         }
 
-        toast.add({
-            severity: severityMap[type],
-            summary: title || type.charAt(0).toUpperCase() + type.slice(1),
-            detail: detail || message,
-            life,
-            closable,
-            group,
-        })
+        if (toast && toast.add) {
+            toast.add({
+                severity: severityMap[type],
+                summary: title || type.charAt(0).toUpperCase() + type.slice(1),
+                detail: detail || message,
+                life,
+                closable,
+                group,
+            })
+        }
     }
 
     /**

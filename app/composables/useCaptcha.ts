@@ -9,9 +9,7 @@ export function useCaptcha() {
 
   async function fetchCaptcha() {
     const now = Date.now()
-    // Debounce/throttle: prevent fetching more than once per second
-    // Also protect against concurrent fetch calls
-    if (now - _lastFetch < 1000 || loading.value) return
+    if (now - _lastFetch < 100 || loading.value) return
     _lastFetch = now
 
     loading.value = true

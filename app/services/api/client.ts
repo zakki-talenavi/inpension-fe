@@ -124,6 +124,7 @@ function createApiFetch(config: ApiClientConfig = {}): ApiFetchFn {
     const apiFetch: ApiFetchFn = $fetch.create({
         baseURL,
         timeout,
+        retry: 0,
         headers: defaultHeaders,
         async onRequest({ options }) {
             const token = getAccessToken()
