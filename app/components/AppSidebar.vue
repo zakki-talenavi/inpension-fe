@@ -151,7 +151,7 @@ const confirmDelete = (key: string) => {
     <div class="sidebar__header w-full flex items-center justify-between h-[56px] px-4 bg-white shrink-0">
       <div class="sidebar__logo flex items-center justify-center">
         <img
-          src="https://inpension.oss-ap-southeast-5.aliyuncs.com/information/logo/DziV4m2DZ2hkduma0OvMqdeSC24In2Jk4Z7VuXzq.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=LTAI5t6sa6VxtwdLZ6qs88XY%2F20260227%2Foss-ap-southeast-5%2Fs3%2Faws4_request&X-Amz-Date=20260227T062041Z&X-Amz-SignedHeaders=host&X-Amz-Expires=1799&X-Amz-Signature=6da530cb948aca70f3be5a0a3421ccceb48c3da1d9b9a9dc54f756bccf3557d1"
+          src="~/assets/layout/logo/logo-inpension.png"
           alt="InPension"
           class="h-8 w-auto object-contain"
         >

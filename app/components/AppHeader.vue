@@ -52,7 +52,7 @@ async function handleLogout() {
 
       <!-- Logout -->
       <button
-        class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-500 hover:text-red-500 hover:bg-red-50 rounded transition-colors"
+        class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-500 hover:text-[#52629d] hover:bg-blue-50 rounded transition-colors cursor-pointer"
         @click="handleLogout"
       >
         <i class="pi pi-sign-out text-xs" />
