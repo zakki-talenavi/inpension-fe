@@ -110,6 +110,20 @@ export function authCaptcha(): Promise<ApiResponse<CaptchaResponse>> {
     return api.get<CaptchaResponse>(AUTH_ENDPOINTS.captcha)
 }
 
+/** Forgot password request */
+export interface ForgotPasswordRequest {
+    email: string
+    captcha_id: string
+    captcha_answer: string
+}
+
+export function authForgotPassword(payload: ForgotPasswordRequest) {
+    return api.post(AUTH_ENDPOINTS.forgotPassword, {
+        ...payload,
+        captcha_answer: payload.captcha_answer?.toUpperCase()
+    })
+}
+
 /** Verify email with token and set new password */
 export interface VerifyEmailRequest {
     token: string

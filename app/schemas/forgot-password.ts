@@ -19,16 +19,21 @@ const emailOrId = z
       )
   )
 
+const captcha = z.string()
+  .min(1, 'Captcha tidak boleh kosong')
+
 export const ForgotPasswordSchema = z.object({
   emailOrId,
+  captcha,
 })
 
 export type ForgotPasswordFormData = z.infer<typeof ForgotPasswordSchema>
 
-export type ForgotPasswordFormErrors = Partial<Record<'emailOrId', string>>
+export type ForgotPasswordFormErrors = Partial<Record<'emailOrId' | 'captcha', string>>
 
 export function validateForgotPasswordForm(input: {
   emailOrId: string
+  captcha: string
 }):
   | { success: true; data: ForgotPasswordFormData }
   | { success: false; fieldErrors: ForgotPasswordFormErrors } {
@@ -38,7 +43,12 @@ export function validateForgotPasswordForm(input: {
   }
   const flattened = result.error.flatten()
   const fieldErrors: ForgotPasswordFormErrors = {}
+
   const emailMsg = flattened.fieldErrors.emailOrId
   if (emailMsg?.length) fieldErrors.emailOrId = emailMsg[0]
+
+  const captchaMsg = flattened.fieldErrors.captcha
+  if (captchaMsg?.length) fieldErrors.captcha = captchaMsg[0]
+
   return { success: false, fieldErrors }
 }

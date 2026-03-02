@@ -11,14 +11,18 @@ const { roleKey } = useLoginRole()
 const router = useRouter()
 const notification = useNotification()
 const emailOrId = ref('')
+const captcha = ref('')
 const errors = ref<ForgotPasswordFormErrors>({})
 const loading = ref(false)
+
+const { captchaKey, captchaImage, fetchCaptcha } = useCaptcha()
 
 const loginRoute = computed(() => ({ path: '/login', query: roleKey.value ? { access: roleKey.value } : undefined }))
 
 async function onSubmit() {
   const result = validateForgotPasswordForm({
     emailOrId: emailOrId.value,
+    captcha: captcha.value,
   })
   if (!result.success) {
     errors.value = result.fieldErrors
@@ -27,17 +31,24 @@ async function onSubmit() {
   errors.value = {}
   loading.value = true
   try {
-    // TODO: panggil API forgot password + kirim result.data.captcha & captchaKey saat backend siap
-    await new Promise(r => setTimeout(r, 800))
+    const { authForgotPassword } = await import('~/services/api/auth')
+    await authForgotPassword({
+      email: result.data.emailOrId,
+      captcha_id: captchaKey.value || '',
+      captcha_answer: result.data.captcha,
+    })
+    
     notification.success('Permintaan berhasil', {
       message: 'Jika akun ditemukan, Anda akan menerima email dengan tautan reset kata sandi.',
       life: 6000,
     })
     await router.push(loginRoute.value)
-  } catch {
-    notification.error('Gagal mengirim permintaan. Silakan coba lagi.')
+  } catch (err: any) {
+    notification.error(err?.message || 'Gagal mengirim permintaan. Silakan coba lagi.')
   } finally {
     loading.value = false
+    captcha.value = ''
+    fetchCaptcha()
   }
 }
 </script>
@@ -79,9 +90,16 @@ async function onSubmit() {
             />
             <small v-if="errors.emailOrId" class="mt-1 block text-sm text-red-600">{{ errors.emailOrId }}</small>
           </div>
-
-
-
+          <div class="mb-6">
+            <CaptchaFormBlock
+              v-model="captcha"
+              :captcha-img="captchaImage"
+              :invalid="!!errors.captcha"
+              :error-message="errors.captcha"
+              input-id="forgot-captcha"
+              @refresh="fetchCaptcha()"
+            />
+          </div>
           <Button
             type="submit"
             label="Cari"
